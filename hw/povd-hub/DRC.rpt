@@ -1,0 +1,51 @@
+** Drc report for povd-hub.kicad_pcb **
+** Created on 2026-10-26T14:09:44 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 11 DRC violations **
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(74.1750 mm, 104.8750 mm): Footprint TP7
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(79.1750 mm, 108.1250 mm): Footprint TP12
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(123.7750 mm, 87.1250 mm): Footprint TP14
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(119.5250 mm, 90.3750 mm): Footprint TP15
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(77.2000 mm, 67.0000 mm): Footprint TP10
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(79.1750 mm, 104.8750 mm): Footprint TP8
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(118.7750 mm, 87.1250 mm): Footprint TP13
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(92.3500 mm, 124.3250 mm): Footprint TP16
+[lib_footprint_mismatch]: Footprint 'Waveshare_ESP32-S3-Zero_Header' does not match copy in library 'povd'
+    Local override; warning
+    @(99.9800 mm, 101.9450 mm): Footprint U5
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(74.1750 mm, 108.1250 mm): Footprint TP11
+[lib_footprint_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    Local override; warning
+    @(92.2750 mm, 128.4750 mm): Footprint TP17
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

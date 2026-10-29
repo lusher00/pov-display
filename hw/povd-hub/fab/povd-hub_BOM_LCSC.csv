@@ -1,0 +1,16 @@
+LCSC Part Number,Manufacturer Part Number,Manufacturer,Quantity,Reference Designator,Description
+C2041460,SRP1270-2R2M,Bourns,2,L2,"Inductor 2.2 uH, Isat 40 A, 4.2 mOhm, 13.7 mm, 7.0 mm tall (1 per board)"
+C19191624,XAL4040-822MEC,Coilcraft,2,L1,"Inductor 8.2 uH, Isat 4.0 A, XAL4040 land (1 per board)"
+C696809,T520D477M006ATE015,KEMET,8,"C23,C24,C25,C26",Polymer tantalum 470 uF 6.3 V 15 mOhm 7343-31 (4 per board)
+C156462,T520V227M006ATE012,KEMET,8,"C37,C38,C43,C44",Polymer tantalum 220 uF 6.3 V 12 mOhm 7343-19 (4 per board)
+C6240321,EMVE630ARA470MHA0G,Nippon Chemi-Con,2,C5,Aluminium electrolytic 47 uF 63 V 8x10 (1 per board)
+C576517,GRM32EC72A106KE05L,Murata,8,"C11,C12,C13,C14",MLCC 10 uF 100 V X7S 1210 (4 per board)
+C437566,GRM32DC72A475KE01L,Murata,2,C6,MLCC 4.7 uF 100 V X7S 1210 (1 per board)
+C21397,GRM32ER71E226KE15L,Murata,14,"C8,C27,C28,C29,C30,C31,C32",MLCC 22 uF 25 V X7R 1210 (7 per board)
+C844900,WSL25125L000FEA,Vishay Dale,2,R1,Shunt 5 mOhm 1% 1 W 2512 (1 per board)
+C99548,0451007.MRL,Littelfuse,5,F1,"Fuse 7 A Nano2 451 SMD, MOQ 5 (1 per board)"
+C224052,SMCJ40A,Littelfuse,2,D1,TVS 40 V unidirectional SMC (1 per board)
+C2906765,5010,Keystone,6,"TP1,TP2,TP9",Test point red through-hole (3 per board)
+C238127,5011,Keystone,8,"TP3,TP4,TP5,TP6",Test point black through-hole (4 per board)
+C7494789,F185-1109A0ASYE3,Yxcon,5,U5,"Female header 1x9 2.54 mm 8.5 mm, MOQ 5 (2 per board)"
+C2337,2.54-1*40P,BOOMELE,2,U5,"Male header 1x40 2.54 mm breakaway, cut 2 x 9 per board"

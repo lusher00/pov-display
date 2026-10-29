@@ -1,0 +1,304 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "5fd47200-1bde-563c-88a3-d65cb5a121d9")
+	(paper "A4")
+	(title_block
+		(title "povd-hub: top level")
+		(date "2026-10-23")
+		(rev "A")
+	)
+	(lib_symbols)
+	(text "LED strip outputs (8 channels, 2 blade connectors)"
+		(exclude_from_sim no)
+		(at 81.28 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1c558b3e-6211-5e8f-8641-d41171d9b537")
+	)
+	(text "Encoder inputs and optical link"
+		(exclude_from_sim no)
+		(at 81.28 151.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "3aa46d83-e2fa-54f7-a4a1-db5651ff3352")
+	)
+	(text "ESP32-S3-Zero"
+		(exclude_from_sim no)
+		(at 81.28 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "581910f6-9c39-575d-8e70-9a5114424ef2")
+	)
+	(text "24 V input, protection, current sense, logic supply"
+		(exclude_from_sim no)
+		(at 81.28 49.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "8b5f070a-12c3-5b7a-a550-4dd93760dd03")
+	)
+	(text "5 V / 15 A LED supply (LM5145)"
+		(exclude_from_sim no)
+		(at 81.28 74.93 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fc9f1884-2e25-5d1e-a025-58bbfd906195")
+	)
+	(sheet
+		(at 25.4 66.04)
+		(size 50.8 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "00974e67-6967-52b8-b6af-9bfabbd2ce9b")
+		(property "Sheetname" "buck_5v"
+			(at 25.4 65.34 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "buck_5v.kicad_sch"
+			(at 25.4 81.88 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "povd-hub"
+				(path "/5fd47200-1bde-563c-88a3-d65cb5a121d9"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 116.84)
+		(size 50.8 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3516bd44-6e70-5cdb-887d-fb312ff4f164")
+		(property "Sheetname" "led_out"
+			(at 25.4 116.14 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "led_out.kicad_sch"
+			(at 25.4 132.68 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "povd-hub"
+				(path "/5fd47200-1bde-563c-88a3-d65cb5a121d9"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 91.44)
+		(size 50.8 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "9040be64-08a7-5924-bcb4-974f093b1617")
+		(property "Sheetname" "mcu"
+			(at 25.4 90.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu.kicad_sch"
+			(at 25.4 107.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "povd-hub"
+				(path "/5fd47200-1bde-563c-88a3-d65cb5a121d9"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 40.64)
+		(size 50.8 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ab7bc1bd-649a-56d8-851b-5b95ab13425f")
+		(property "Sheetname" "power_in"
+			(at 25.4 39.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power_in.kicad_sch"
+			(at 25.4 56.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "povd-hub"
+				(path "/5fd47200-1bde-563c-88a3-d65cb5a121d9"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 25.4 142.24)
+		(size 50.8 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "e55a3909-56a1-582a-9f67-2be1ff2d4a0e")
+		(property "Sheetname" "encoder"
+			(at 25.4 141.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "encoder.kicad_sch"
+			(at 25.4 158.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "povd-hub"
+				(path "/5fd47200-1bde-563c-88a3-d65cb5a121d9"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

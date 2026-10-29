@@ -1,0 +1,5 @@
+numpy
+aiohttp
+pyserial
+smbus2
+# GPIO edge timestamps for the once-per-rev sensor: apt install python3-libgpiod

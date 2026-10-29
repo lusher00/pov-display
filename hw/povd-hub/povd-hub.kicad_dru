@@ -1,0 +1,7 @@
+(version 1)
+
+# GND pads that are connected by a fan-out trace and via but sit in tight spots
+# where the pour cannot fit two thermal spokes. Connect them to the pour solid.
+(rule "GND solid on fanned-out pads"
+	(constraint zone_connection solid)
+	(condition "A.Type == 'Pad' && A.NetName == 'GND' && (A.memberOfFootprint('C11') || A.memberOfFootprint('C12') || A.memberOfFootprint('C16') || A.memberOfFootprint('C18') || A.memberOfFootprint('C34') || A.memberOfFootprint('C35') || A.memberOfFootprint('C36') || A.memberOfFootprint('C47') || A.memberOfFootprint('R14') || A.memberOfFootprint('U1') || A.memberOfFootprint('U2') || A.memberOfFootprint('U9'))"))

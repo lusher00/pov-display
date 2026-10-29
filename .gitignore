@@ -1,0 +1,21 @@
+# KiCad
+*.kicad_prl
+*-backups/
+*.lck
+fp-info-cache
+_autosave-*
+*.bak
+\#auto_saved_files#
+hw/**/gerbers/
+hw/**/production/
+# Firmware
+fw/**/build/
+fw/**/sdkconfig.old
+fw/**/managed_components/
+# OS
+.DS_Store
+# Pi controller
+__pycache__/
+.pytest_cache/
+pi/povd.conf.tmp
+pi/balance.json.tmp

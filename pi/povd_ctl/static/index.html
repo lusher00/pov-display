@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>povd rotor</title>
+<style>
+:root{--bg:#111418;--panel:#1a1f26;--line:#2a313b;--fg:#e4e8ee;--dim:#8b95a3;--acc:#4aa3ff;--ok:#3ccf7a;--warn:#f0b43c;--bad:#ff5b5b;--c1:#4aa3ff;--c2:#f0b43c;--c3:#c77dff;--c4:#3ccf7a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+h1{font-size:16px;margin:0 8px 0 0}
+.badge{padding:3px 10px;border-radius:4px;font-weight:700;letter-spacing:.04em}
+.m-idle{background:#2a313b}.m-run{background:#14532d}.m-stop{background:#5b4510}.m-trip{background:#7f1d1d}
+#conn{color:var(--dim);font-size:12px}
+#estop{margin-left:auto;background:#c81e1e;color:#fff;border:0;border-radius:6px;font-weight:800;font-size:18px;padding:12px 26px;cursor:pointer}
+#estop:active{background:#8f1414}
+.banner{padding:8px 16px;font-weight:600;display:none}
+#trip{background:#7f1d1d}#pause{background:#5b4510}
+main{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:12px;padding:12px 16px}
+@media (max-width:900px){main{grid-template-columns:1fr;padding:12px 8px}}
+@media (max-width:500px){#estop{margin-left:0;width:100%}label.k{min-width:120px}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px}
+.panel h2{font-size:13px;margin:0 0 10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
+label.k{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;min-width:150px}
+input[type=number],input[type=text]{background:#0e1115;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:5px 7px;width:110px;font-family:ui-monospace,Menlo,monospace}
+button{background:#263040;color:var(--fg);border:1px solid #34404f;border-radius:5px;padding:6px 12px;cursor:pointer;font-weight:600}
+button:hover{background:#2f3b4e}
+button.go{background:#1d5c37;border-color:#24784a}
+button.stop{background:#5b4510;border-color:#7a5d17}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+#live td.k{width:58%}
+.cfgtab{table-layout:auto}
+.cfgtab td.k{white-space:normal}
+td{padding:3px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td.k{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--fg);white-space:nowrap}
+td.v{font-family:ui-monospace,Menlo,monospace;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.desc{color:var(--dim);font-size:11.5px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:1200px){.charts{grid-template-columns:1fr}}
+canvas{width:100%;height:220px;display:block;background:#0e1115;border-radius:4px}
+.legend{font-size:12px;color:var(--dim);margin-top:4px}
+.legend span{margin-right:12px}
+#events{font-family:ui-monospace,Menlo,monospace;font-size:12px;max-height:200px;overflow:auto;white-space:pre-wrap;color:var(--dim)}
+#balres{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;margin-top:8px}
+.bad{color:var(--bad)}.warn{color:var(--warn)}.ok{color:var(--ok)}
+details summary{cursor:pointer;color:var(--dim);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cfgtab td{padding:4px}
+</style>
+</head>
+<body>
+<header>
+  <h1>povd rotor</h1>
+  <span id="mode" class="badge m-idle">IDLE</span>
+  <span id="simtag" class="badge" style="background:#3b2a5c;display:none">SIMULATION</span>
+  <span id="conn">connecting…</span>
+  <button id="estop" title="Applies trip_hard_action">E-STOP</button>
+</header>
+<div id="trip" class="banner"></div>
+<div id="pause" class="banner"><span id="pausetxt"></span> <button id="resume">Resume</button> <button id="pstop" class="stop">Stop</button></div>
+<main>
+<section>
+  <div class="panel">
+    <h2>Speed</h2>
+    <div class="row"><label class="k" for="rpm_target">rpm_target</label><input id="rpm_target" type="number" step="10" value="500"></div>
+    <div class="row"><label class="k" for="ramp_rate_rpm_s">ramp_rate_rpm_s</label><input id="ramp_rate_rpm_s" type="number" step="5"></div>
+    <div class="row">
+      <button class="go" id="run">Run</button><button id="hold">Hold</button>
+      <button class="stop" id="stop">Stop</button><button id="reset">Reset trip</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Live</h2>
+    <table id="live"></table>
+  </div>
+  <div class="panel">
+    <h2>Balance</h2>
+    <div class="desc" id="balhelp"></div>
+    <div class="row"><label class="k" for="trial_g">trial_g</label><input id="trial_g" type="number" step="0.1" value="1.0"></div>
+    <div class="row"><label class="k" for="trial_deg">trial_deg</label><input id="trial_deg" type="number" step="5" value="0"></div>
+    <div id="balsteps"></div>
+    <div class="row"><b>balance state:</b> <span id="balstate">idle</span></div>
+    <div class="row"><button id="compute" class="go">Compute correction</button><button id="trim">Trim from check</button><button id="balclear">Clear runs</button></div>
+    <div id="balres"></div>
+    <table id="runs"></table>
+    <div class="row"><b>Fitted masses</b></div>
+    <table id="fitted"></table>
+    <div class="row"><label class="k" for="fit_g">fit_g</label><input id="fit_g" type="number" step="0.1"></div>
+    <div class="row"><label class="k" for="fit_deg">fit_deg</label><input id="fit_deg" type="number" step="5"></div>
+    <div class="row"><button id="fitbtn">Record fitted</button><span class="desc">Record every mass you fit or remove, so runs know what was on the rotor.</span></div>
+  </div>
+</section>
+<section>
+  <div class="charts">
+    <div class="panel"><h2>rpm vs time</h2><canvas id="c_rpm"></canvas>
+      <div class="legend"><span style="color:var(--c1)">rpm</span><span style="color:var(--c2)">rpm_cmd</span><span style="color:var(--dim)">rpm_target</span></div></div>
+    <div class="panel"><h2>vibration vs time (g)</h2><canvas id="c_vib"></canvas>
+      <div class="legend"><span style="color:var(--c1)">a1x_g</span><span style="color:var(--c2)">rms_g</span><span style="color:var(--c3)">ns_g</span><span style="color:var(--bad)">limits</span></div></div>
+    <div class="panel"><h2>a1x_g vs rpm (resonance map)</h2><canvas id="c_map"></canvas>
+      <div class="legend"><span style="color:var(--c1)">this session</span></div></div>
+    <div class="panel"><h2>spectrum (g peak)</h2><canvas id="c_spec"></canvas>
+      <div class="legend"><span style="color:var(--c2)">1x and harmonics</span><span style="color:var(--c3)">ns peak</span></div></div>
+    <div class="panel"><h2>1x vector (phase from once-per-rev)</h2><canvas id="c_pol" style="height:260px"></canvas>
+      <div class="legend"><span style="color:var(--c1)">live</span><span style="color:var(--c4)">balance runs</span></div></div>
+    <div class="panel"><h2>events</h2><div id="events"></div></div>
+  </div>
+  <div class="panel"><details><summary>Config (povd.conf)</summary><table class="cfgtab" id="cfg"></table></details></div>
+</section>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let ws, snap = {}, hist = [], spec = null, cfg = {}, reqId = 0;
+const LIVE = [['rpm','%.0f'],['rpm_cmd','%.0f'],['rpm_vesc','%.0f'],['opr_rpm','%.0f'],['opr_pattern_errors','%s'],['a1x_g','%.3f'],['a1x_deg','%.0f'],['rms_g','%.3f'],
+  ['ns_g','%.3f'],['ns_hz','%.1f'],['ns_tau_s','%.2f'],['slope_n','%.1f'],['motor_current_a','%.1f'],['input_current_a','%.2f'],
+  ['v_in','%.1f'],['duty','%.3f'],['temp_fet_c','%.0f'],['temp_motor_c','%.0f'],['fault','%s'],['imu_rate_hz','%.0f'],
+  ['imu_age_s','%.2f'],['vesc_age_s','%.2f'],['vesc_errors','%s'],['log','%s']];
+function fmt(f, v){ if(v===null||v===undefined) return '—'; if(f==='%s') return String(v).split('/').pop();
+  const n=+f.match(/\.(\d)f/)[1]; return Number(v).toFixed(n); }
+
+function connect(){
+  ws = new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws');
+  ws.onopen = ()=>{ $('conn').textContent='connected'; };
+  ws.onclose = ()=>{ $('conn').textContent='disconnected — retrying'; setTimeout(connect, 1000); };
+  ws.onmessage = e => {
+    const m = JSON.parse(e.data);
+    if(m.type==='snap'){ snap=m; renderSnap(); }
+    else if(m.type==='hist'){ if(m.full) hist=[]; hist.push(...m.points); if(hist.length>2400) hist.splice(0,hist.length-2400); }
+    else if(m.type==='spec'){ spec=m; }
+    else if(m.type==='events'){ const el=$('events'); for(const [t,msg] of m.items){ el.textContent += new Date(t*1000).toLocaleTimeString()+'  '+msg+'\n'; } el.scrollTop=el.scrollHeight; }
+    else if(m.type==='config'){ renderCfg(m.items); }
+    else if(m.type==='reply'){ const r=m.result; if(r && r!=='ok'){ if(typeof r==='string') alert(r); else if(r.error) alert(r.error); else if(pending[m.id]) pending[m.id](r);} delete pending[m.id]; }
+  };
+}
+const pending = {};
+function send(o, cb){ o.id=++reqId; if(cb) pending[o.id]=cb; if(ws && ws.readyState===1) ws.send(JSON.stringify(o)); }
+
+function renderSnap(){
+  const s=snap;
+  const md=$('mode'); md.textContent=s.mode.toUpperCase()+(s.paused?' (PAUSED)':''); md.className='badge m-'+s.mode;
+  $('simtag').style.display = s.sim?'inline-block':'none';
+  const tb=$('trip'); if(s.mode==='trip'){ tb.style.display='block'; tb.textContent='TRIP ('+s.trip_kind+'): '+s.trip_reason; } else tb.style.display='none';
+  const pb=$('pause'); if(s.paused){ pb.style.display='block'; $('pausetxt').textContent=s.pause_reason; } else pb.style.display='none';
+  let h=''; for(const [k,f] of LIVE){ let cls=''; const v=s[k];
+    if(k==='a1x_g'&&v>cfg.vib_1x_limit_g*0.7) cls='warn'; if(k==='rms_g'&&v>cfg.vib_rms_limit_g*0.7) cls='warn';
+    if(k==='ns_g'&&v>cfg.vib_nonsync_limit_g*0.7) cls='warn'; if(k==='fault'&&v&&v!=='NONE') cls='bad';
+    h+=`<tr><td class="k">${k}</td><td class="v ${cls}">${fmt(f,v)}</td></tr>`; }
+  $('live').innerHTML=h;
+  const b=s.balance; $('balstate').textContent=b.state+(b.label?' "'+b.label+'"':'')+(b.msg?' — '+b.msg:'');
+  renderBal(b);
+}
+
+function renderBal(b){
+  const opr = snap.opr;
+  $('balhelp').innerHTML = opr
+    ? 'Vector method (once-per-rev fitted): 1) run <b>baseline</b> 2) fit trial mass, record it 3) run <b>trial</b> 4) Compute, remove trial, fit correction 5) run <b>check</b>; later corrections: run <b>check</b> then Trim.'
+    : '4-run method (no once-per-rev): 1) run <b>baseline</b> 2) trial mass at trial_deg → run <b>trial_a</b> 3) move it to trial_deg+120 → <b>trial_b</b> 4) to trial_deg+240 → <b>trial_c</b> 5) Compute. Same trial_g each time.';
+  const labels = opr ? ['baseline','trial','check'] : ['baseline','trial_a','trial_b','trial_c','check'];
+  const key = labels.join();
+  if($('balsteps').dataset.k!==key){ $('balsteps').dataset.k=key;
+    $('balsteps').innerHTML = '<div class="row">'+labels.map(l=>`<button data-l="${l}">Run ${l}</button>`).join('')+'</div>';
+    for(const btn of $('balsteps').querySelectorAll('button')) btn.onclick=()=>send({cmd:'bal_run',label:btn.dataset.l}); }
+  let h='<tr><td class="k">run</td><td class="v">a1x_g</td><td class="v">deg</td><td class="v">rpm</td><td class="v">revs</td></tr>';
+  for(const [k,r] of Object.entries(b.runs||{})) h+=`<tr><td class="k">${k}</td><td class="v">${r.amp_g.toFixed(4)}</td><td class="v">${r.phase_deg===null?'—':r.phase_deg.toFixed(0)}</td><td class="v">${r.rpm.toFixed(0)}</td><td class="v">${r.n_revs}</td></tr>`;
+  $('runs').innerHTML=h;
+  let f=''; (b.fitted||[]).forEach(([g,d])=>{ f+=`<tr><td class="v">${g.toFixed(2)} g</td><td class="v">${d.toFixed(0)}°</td><td><button data-g="${g}" data-d="${d}" class="rm">remove</button></td></tr>`; });
+  $('fitted').innerHTML=f||'<tr><td class="desc">none recorded</td></tr>';
+  for(const btn of $('fitted').querySelectorAll('button.rm')) btn.onclick=()=>send({cmd:'bal_fit',grams:+btn.dataset.g,deg:+btn.dataset.d,remove:true});
+}
+
+function showResult(r){
+  let t = r.method+'\n';
+  t += `correction: ${r.correction_g.toFixed(2)} g at ${r.correction_deg.toFixed(0)}°  (radius ${r.radius_mm} mm)\n`;
+  if(r.with_trial_left_g!==undefined) t+=`or, leaving the trial mass on: add ${r.with_trial_left_g.toFixed(2)} g at ${r.with_trial_left_deg.toFixed(0)}°\n`;
+  if(r.split) t+='split onto allowed positions: '+r.split.map(([g,d])=>g.toFixed(2)+' g at '+d+'°').join(' + ')+'\n';
+  if(r.g_per_gram!==undefined) t+=`sensitivity: ${(r.g_per_gram*1000).toFixed(2)} mg per gram\n`;
+  if(r.trial_effect_pct!==undefined) t+=`trial changed the 1x vector by ${r.trial_effect_pct.toFixed(0)} % (aim for 20–100 %)\n`;
+  $('balres').textContent=t;
+  $('fit_g').value=r.correction_g.toFixed(2); $('fit_deg').value=r.correction_deg.toFixed(0);
+}
+
+function renderCfg(items){
+  let h='';
+  for(const it of items){ cfg[it.key]=it.value;
+    const type = (it.type==='str')?'text':'number';
+    h+=`<tr><td class="k"><label for="cfg_${it.key}">${it.key}</label><div class="desc">${it.desc}${it.live?'':' (restart to apply)'}</div></td>
+        <td><input id="cfg_${it.key}" type="${type}" ${type==='number'?'step="any"':''} value="${it.value}"></td>
+        <td><button data-k="${it.key}">Save</button></td></tr>`; }
+  const tab=$('cfg'); const open=document.activeElement && document.activeElement.id.startsWith('cfg_');
+  if(!open) tab.innerHTML=h;
+  for(const btn of tab.querySelectorAll('button')) btn.onclick=()=>send({cmd:'set',key:btn.dataset.k,value:$('cfg_'+btn.dataset.k).value});
+  if(document.activeElement!==$('ramp_rate_rpm_s')) $('ramp_rate_rpm_s').value=cfg.ramp_rate_rpm_s;
+}
+
+// ---------------- plotting ----------------
+function setup(c){ const r=c.getBoundingClientRect(), d=devicePixelRatio||1;
+  if(c.width!==Math.round(r.width*d)||c.height!==Math.round(r.height*d)){ c.width=Math.round(r.width*d); c.height=Math.round(r.height*d); }
+  const g=c.getContext('2d'); g.setTransform(d,0,0,d,0,0); g.clearRect(0,0,r.width,r.height); return [g,r.width,r.height]; }
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function axes(g,W,H,x0,x1,y0,y1,xl,yl){
+  const L=46,B=22,T=8,R=8; g.strokeStyle=css('--line'); g.fillStyle=css('--dim'); g.font='11px system-ui'; g.lineWidth=1;
+  const X=v=>L+(v-x0)/(x1-x0||1)*(W-L-R), Y=v=>H-B-(v-y0)/(y1-y0||1)*(H-B-T);
+  for(const v of ticks(y0,y1,5)){ g.beginPath(); g.moveTo(L,Y(v)); g.lineTo(W-R,Y(v)); g.stroke(); g.fillText(fmtT(v),2,Y(v)+4); }
+  for(const v of ticks(x0,x1,6)){ g.fillText(fmtT(v),X(v)-10,H-6); }
+  if(yl){ g.save(); g.fillText(yl,L+4,T+10); g.restore(); } if(xl) g.fillText(xl,W-R-60,H-B-4);
+  return [X,Y]; }
+function ticks(a,b,n){ const s=nice((b-a)/n); const out=[]; for(let v=Math.ceil(a/s)*s; v<=b+1e-9; v+=s) out.push(+v.toFixed(10)); return out; }
+function nice(x){ const e=Math.pow(10,Math.floor(Math.log10(x||1))); const f=x/e; return (f<1.5?1:f<3?2:f<7?5:10)*e; }
+function fmtT(v){ const a=Math.abs(v); return v===0?'0':a>=100?v.toFixed(0):a>=1?v.toFixed(1):a>=0.01?v.toFixed(2):v.toPrecision(2); }
+function line(g,X,Y,xs,ys,col,w=1.6){ g.strokeStyle=col; g.lineWidth=w; g.beginPath(); let st=false;
+  for(let i=0;i<xs.length;i++){ if(ys[i]===null||ys[i]===undefined){st=false;continue;} const x=X(xs[i]),y=Y(ys[i]); if(!st){g.moveTo(x,y);st=true;} else g.lineTo(x,y);} g.stroke(); }
+function hline(g,X,Y,x0,x1,y,col){ g.strokeStyle=col; g.setLineDash([4,4]); g.beginPath(); g.moveTo(X(x0),Y(y)); g.lineTo(X(x1),Y(y)); g.stroke(); g.setLineDash([]); }
+
+function draw(){
+  const now=Date.now()/1000, span=120, H=hist.filter(h=>h.t>now-span);
+  // rpm
+  { const [g,W,Hh]=setup($('c_rpm')); const xs=H.map(h=>h.t-now);
+    const ymax=Math.max(100,...H.map(h=>Math.max(h.rpm||0,h.rpm_cmd||0,h.rpm_target||0)))*1.1;
+    const [X,Y]=axes(g,W,Hh,-span,0,0,ymax,'s','rpm');
+    line(g,X,Y,xs,H.map(h=>h.rpm_target),css('--dim'),1); line(g,X,Y,xs,H.map(h=>h.rpm_cmd),css('--c2')); line(g,X,Y,xs,H.map(h=>h.rpm),css('--c1')); }
+  // vibration
+  { const [g,W,Hh]=setup($('c_vib')); const xs=H.map(h=>h.t-now);
+    const ymax=Math.max(cfg.vib_1x_limit_g||0.5, cfg.vib_rms_limit_g||1, ...H.map(h=>Math.max(h.a1x_g||0,h.rms_g||0,h.ns_g||0)))*1.1;
+    const [X,Y]=axes(g,W,Hh,-span,0,0,ymax,'s','g');
+    for(const k of ['vib_1x_limit_g','vib_rms_limit_g','vib_nonsync_limit_g']) if(cfg[k]) hline(g,X,Y,-span,0,cfg[k],css('--bad'));
+    line(g,X,Y,xs,H.map(h=>h.ns_g),css('--c3')); line(g,X,Y,xs,H.map(h=>h.rms_g),css('--c2')); line(g,X,Y,xs,H.map(h=>h.a1x_g),css('--c1')); }
+  // resonance map
+  { const [g,W,Hh]=setup($('c_map')); const P=hist.filter(h=>h.rpm>50&&h.a1x_g!==null);
+    const xmax=Math.max(500,...P.map(h=>h.rpm))*1.05, ymax=Math.max(0.05,...P.map(h=>h.a1x_g))*1.1;
+    const [X,Y]=axes(g,W,Hh,0,xmax,0,ymax,'rpm','g'); g.fillStyle=css('--c1');
+    P.forEach((h,i)=>{ g.globalAlpha=0.25+0.75*i/P.length; g.fillRect(X(h.rpm)-1.5,Y(h.a1x_g)-1.5,3,3); }); g.globalAlpha=1; }
+  // spectrum
+  { const [g,W,Hh]=setup($('c_spec'));
+    if(spec&&spec.f.length){ const ymax=Math.max(0.01,...spec.a)*1.1; const [X,Y]=axes(g,W,Hh,0,spec.f[spec.f.length-1],0,ymax,'Hz','g');
+      if(spec.f1>0) for(let k=1;k<=5;k++){ g.strokeStyle=css('--c2'); g.globalAlpha=k===1?0.9:0.35; g.beginPath(); g.moveTo(X(k*spec.f1),Y(0)); g.lineTo(X(k*spec.f1),Y(ymax)); g.stroke(); }
+      g.globalAlpha=1;
+      if(snap.ns_hz){ g.strokeStyle=css('--c3'); g.setLineDash([3,3]); g.beginPath(); g.moveTo(X(snap.ns_hz),Y(0)); g.lineTo(X(snap.ns_hz),Y(ymax)); g.stroke(); g.setLineDash([]); }
+      line(g,X,Y,spec.f,spec.a,css('--c1'),1.2); } else axes(g,W,Hh,0,100,0,0.1,'Hz','g'); }
+  // polar
+  { const [g,W,Hh]=setup($('c_pol')); const cx=W/2, cy=Hh/2, R=Math.min(W,Hh)/2-18;
+    const runs=Object.entries((snap.balance||{}).runs||{}).filter(([k,r])=>r.phase_deg!==null);
+    const amax=Math.max(0.02, snap.a1x_g||0, ...runs.map(([k,r])=>r.amp_g))*1.15;
+    g.strokeStyle=css('--line'); g.fillStyle=css('--dim'); g.font='11px system-ui';
+    for(let i=1;i<=4;i++){ g.beginPath(); g.arc(cx,cy,R*i/4,0,2*Math.PI); g.stroke(); }
+    for(let a=0;a<360;a+=30){ const r=a*Math.PI/180; g.beginPath(); g.moveTo(cx,cy); g.lineTo(cx+R*Math.sin(r),cy-R*Math.cos(r)); g.stroke();
+      g.fillText(a+'°',cx+(R+10)*Math.sin(r)-8,cy-(R+10)*Math.cos(r)+4); }
+    g.fillText(amax.toFixed(3)+' g',cx+4,cy-R+12);
+    const pt=(amp,deg)=>{ const r=deg*Math.PI/180, l=amp/amax*R; return [cx+l*Math.sin(r), cy-l*Math.cos(r)]; };
+    for(const [k,r] of runs){ const [x,y]=pt(r.amp_g,r.phase_deg); g.fillStyle=css('--c4'); g.beginPath(); g.arc(x,y,4,0,7); g.fill(); g.fillText(k,x+6,y-4); }
+    if(snap.a1x_deg!==null && snap.a1x_deg!==undefined){ const [x,y]=pt(snap.a1x_g,snap.a1x_deg); g.strokeStyle=css('--c1'); g.lineWidth=2; g.beginPath(); g.moveTo(cx,cy); g.lineTo(x,y); g.stroke(); }
+    else { g.fillStyle=css('--dim'); g.fillText('no once-per-rev sensor: amplitude only',10,Hh-8); } }
+  requestAnimationFrame(draw);
+}
+
+$('run').onclick=()=>send({cmd:'run',rpm_target:+$('rpm_target').value,ramp_rate_rpm_s:+$('ramp_rate_rpm_s').value});
+$('hold').onclick=()=>send({cmd:'hold'}); $('stop').onclick=()=>send({cmd:'stop'}); $('pstop').onclick=()=>send({cmd:'stop'});
+$('reset').onclick=()=>send({cmd:'reset'}); $('resume').onclick=()=>send({cmd:'resume'}); $('estop').onclick=()=>send({cmd:'estop'});
+$('compute').onclick=()=>send({cmd:'bal_compute',trial_g:+$('trial_g').value,trial_deg:+$('trial_deg').value},showResult);
+$('trim').onclick=()=>send({cmd:'bal_trim'},showResult);
+$('balclear').onclick=()=>{ if(confirm('Clear all balance runs and the fitted-mass list?')) send({cmd:'bal_clear'}); };
+$('fitbtn').onclick=()=>send({cmd:'bal_fit',grams:+$('fit_g').value,deg:+$('fit_deg').value});
+document.addEventListener('keydown',e=>{ if(e.key===' ' && e.target.tagName!=='INPUT'){ e.preventDefault(); send({cmd:'estop'}); } });
+connect(); requestAnimationFrame(draw);
+</script>
+</body>
+</html>

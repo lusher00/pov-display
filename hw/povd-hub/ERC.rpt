@@ -1,0 +1,547 @@
+ERC report (2026-10-26T14:09:24, Encoding UTF8)
+Report includes: Errors, Warnings, Exclusions
+
+***** Sheet /
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3625 mils, 3025 mils): Symbol J1 Pin 1 [Pin_1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3625 mils, 3025 mils): Horizontal Wire, length 400 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3625 mils, 3125 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3725 mils, 3125 mils): Symbol #PWRPOW000 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4025 mils, 2725 mils): Vertical Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4025 mils, 2725 mils): Symbol H5 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4025 mils, 3025 mils): Horizontal Wire, length 125 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4150 mils, 2425 mils): Symbol H2 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4150 mils, 2425 mils): Vertical Wire, length 600 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4150 mils, 3025 mils): Horizontal Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4325 mils, 2425 mils): Symbol H6 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4325 mils, 2425 mils): Vertical Wire, length 600 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4325 mils, 3025 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4425 mils, 2725 mils): Symbol H7 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4425 mils, 2725 mils): Vertical Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4425 mils, 3025 mils): Horizontal Wire, length 500 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4625 mils, 3875 mils): Symbol C2 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4625 mils, 3875 mils): Symbol #PWRPOW005 Hidden pin 1 [+3V3, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4625 mils, 4175 mils): Symbol #PWRPOW006 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4925 mils, 2375 mils): Symbol TP1 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4925 mils, 2375 mils): Vertical Wire, length 650 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4925 mils, 3025 mils): Horizontal Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4975 mils, 5650 mils): Symbol H1 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4975 mils, 5650 mils): Symbol #PWRPOW016 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5100 mils, 3000 mils): Vertical Wire, length 25 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5100 mils, 3025 mils): Horizontal Wire, length 125 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5225 mils, 3025 mils): Symbol F1 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5525 mils, 3025 mils): Horizontal Wire, length 125 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5525 mils, 3025 mils): Vertical Wire, length 1200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5650 mils, 3025 mils): Vertical Wire, length 575 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5650 mils, 3025 mils): Horizontal Wire, length 275 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5650 mils, 3900 mils): Vertical Wire, length 225 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5725 mils, 4125 mils): Symbol U1 Pin 1 [VCAP, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5725 mils, 4125 mils): Horizontal Wire, length 75 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5725 mils, 4225 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5925 mils, 2975 mils): Vertical Wire, length 50 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5925 mils, 2975 mils): Symbol #FLG01 Pin 1 [Power output, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5925 mils, 3025 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(5925 mils, 3625 mils): Vertical Wire, length 600 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6025 mils, 3025 mils): Symbol Q1 Pin 1 [S, Passive, Line]
+[lib_symbol_mismatch]: Symbol 'BSC028N06LS3' doesn't match copy in library 'Transistor_FET'
+    ; warning
+    @(6225 mils, 3125 mils): Symbol Q1 [BSC028N06LS3]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6225 mils, 3325 mils): Vertical Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6225 mils, 4425 mils): Symbol #PWRPOW001 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6425 mils, 3025 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6525 mils, 3025 mils): Horizontal Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6525 mils, 3625 mils): Vertical Wire, length 600 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6575 mils, 5650 mils): Symbol H3 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6575 mils, 5650 mils): Symbol #PWRPOW018 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6825 mils, 3025 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6825 mils, 3325 mils): Symbol D1 Pin 1 [A1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(6825 mils, 3325 mils): Symbol #PWRPOW002 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7025 mils, 1925 mils): Vertical Wire, length 1100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7025 mils, 3025 mils): Horizontal Wire, length 525 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7125 mils, 2125 mils): Vertical Wire, length 500 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7125 mils, 2625 mils): Horizontal Wire, length 800 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7225 mils, 1925 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7225 mils, 2125 mils): Symbol U2 Pin 1 [-, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7225 mils, 2125 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7375 mils, 5650 mils): Symbol #PWRPOW019 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7375 mils, 5650 mils): Symbol H4 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7425 mils, 1725 mils): Symbol #PWRPOW003 Hidden pin 1 [+3V3, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7425 mils, 2325 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7425 mils, 2425 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7525 mils, 2325 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7525 mils, 2425 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7550 mils, 3025 mils): Symbol R1 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7625 mils, 2325 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7625 mils, 2425 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7825 mils, 2025 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7825 mils, 2425 mils): Symbol #PWRPOW004 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7850 mils, 3025 mils): Horizontal Wire, length 75 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7925 mils, 2625 mils): Vertical Wire, length 400 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(7925 mils, 3025 mils): Horizontal Wire, length 500 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8025 mils, 2025 mils): Symbol R2 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8325 mils, 2025 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 2800 mils): Symbol TP2 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 2800 mils): Vertical Wire, length 225 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3025 mils): Horizontal Wire, length 425 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3075 mils): Symbol C5 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3075 mils): Vertical Wire, length 50 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3375 mils): Vertical Wire, length 325 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3700 mils): Horizontal Wire, length 825 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3700 mils): Vertical Wire, length 75 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8425 mils, 3775 mils): Symbol #PWRPOW008 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8525 mils, 1825 mils): Symbol TP7 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8525 mils, 1825 mils): Vertical Wire, length 200 mils
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(8525 mils, 1825 mils): Symbol TP7 [TestPoint]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8525 mils, 2025 mils): Horizontal Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8825 mils, 2025 mils): Symbol C3 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8825 mils, 2025 mils): Horizontal Wire, length 400 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8825 mils, 2325 mils): Symbol #PWRPOW007 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8850 mils, 2975 mils): Vertical Wire, length 50 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8850 mils, 2975 mils): Symbol #FLG03 Pin 1 [Power output, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8850 mils, 3025 mils): Horizontal Wire, length 725 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8975 mils, 5650 mils): Symbol #PWRPOW021 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(8975 mils, 5650 mils): Symbol H8 Pin 1 [1, Input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9250 mils, 3025 mils): Symbol C6 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9250 mils, 2850 mils): Vertical Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9250 mils, 3700 mils): Vertical Wire, length 375 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9475 mils, 3125 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9475 mils, 3700 mils): Vertical Wire, length 475 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9250 mils, 3700 mils): Horizontal Wire, length 225 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9575 mils, 3125 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(9575 mils, 3225 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 3025 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 3025 mils): Symbol U3 Pin 1 [CB, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 3125 mils): Horizontal Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 3225 mils): Horizontal Wire, length 150 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 5550 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 5550 mils): Symbol TP3 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10375 mils, 5650 mils): Symbol #PWRPOW022 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10475 mils, 2825 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10475 mils, 3025 mils): Vertical Wire, length 200 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3225 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3225 mils): Horizontal Wire, length 300 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3325 mils): Symbol R6 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3700 mils): Horizontal Wire, length 1050 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3700 mils): Vertical Wire, length 75 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10525 mils, 3700 mils): Horizontal Wire, length 2150 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10575 mils, 2825 mils): Symbol C7 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10575 mils, 3125 mils): Horizontal Wire, length 250 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10825 mils, 3125 mils): Symbol L1 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10825 mils, 3225 mils): Symbol R5 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10975 mils, 5550 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10975 mils, 5550 mils): Symbol TP4 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(10975 mils, 5650 mils): Symbol #PWRPOW023 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11125 mils, 3125 mils): Horizontal Wire, length 750 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11125 mils, 3225 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11225 mils, 3225 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11575 mils, 5550 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11575 mils, 5550 mils): Symbol TP5 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11575 mils, 5650 mils): Symbol #PWRPOW024 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11875 mils, 3125 mils): Horizontal Wire, length 400 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11875 mils, 3225 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11875 mils, 3225 mils): Symbol C8 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(11875 mils, 3525 mils): Vertical Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12175 mils, 5550 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12175 mils, 5550 mils): Symbol TP6 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12175 mils, 5650 mils): Symbol #PWRPOW025 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12575 mils, 3125 mils): Horizontal Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12575 mils, 3125 mils): Symbol D2 Pin 1 [K, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 2925 mils): Symbol TP8 Pin 1 [1, Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 2925 mils): Vertical Wire, length 200 mils
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(12675 mils, 2925 mils): Symbol TP8 [TestPoint]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 3125 mils): Horizontal Wire, length 375 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 3225 mils): Symbol C9 Pin 1 [Passive, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 3225 mils): Vertical Wire, length 100 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(12675 mils, 3525 mils): Vertical Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(13050 mils, 2875 mils): Symbol #PWRPOW015 Hidden pin 1 [+5V_LOGIC, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(13050 mils, 3125 mils): Vertical Wire, length 250 mils
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(2150 mils, 5000 mils): Symbol TP10 [TestPoint]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3950 mils, 3575 mils): Vertical Wire, length 25 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(3950 mils, 3575 mils): Symbol #PWRBUC001 Hidden pin 1 [GND, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4800 mils, 6175 mils): Symbol #FLG07 Pin 1 [Power output, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4800 mils, 6175 mils): Horizontal Wire, length 50 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4850 mils, 6150 mils): Vertical Wire, length 25 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(4850 mils, 6175 mils): Vertical Wire, length 25 mils
+[lib_symbol_mismatch]: Symbol 'BSC028N06LS3' doesn't match copy in library 'Transistor_FET'
+    ; warning
+    @(7750 mils, 3400 mils): Symbol Q2 [BSC028N06LS3]
+[lib_symbol_mismatch]: Symbol 'BSC028N06LS3' doesn't match copy in library 'Transistor_FET'
+    ; warning
+    @(7750 mils, 5000 mils): Symbol Q3 [BSC028N06LS3]
+[lib_symbol_mismatch]: Symbol 'LED' doesn't match copy in library 'Device'
+    ; warning
+    @(15350 mils, 4450 mils): Symbol D3 [LED]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(15875 mils, 3600 mils): Vertical Wire, length 400 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(15875 mils, 3600 mils): Symbol #PWRBUC032 Hidden pin 1 [+5V, Power input, Line]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(15875 mils, 4000 mils): Horizontal Wire, length 125 mils
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(3600 mils, 3300 mils): Symbol TP11 [TestPoint]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(4200 mils, 2300 mils): Symbol TP13 [TestPoint]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(4200 mils, 6500 mils): Symbol TP12 [TestPoint]
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(2350 mils, 2225 mils): Vertical Wire, length 175 mils
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(2350 mils, 2225 mils): Symbol #FLG04 Pin 1 [Power output, Line]
+[lib_symbol_mismatch]: Symbol 'SolderJumper_3_Bridged12' doesn't match copy in library 'Jumper'
+    ; warning
+    @(2600 mils, 2400 mils): Symbol JP1 [SolderJumper_3_Bridged12]
+[lib_symbol_issues]: Symbol 'Q_NMOS_GSD' not found in symbol library 'Device'
+    ; warning
+    @(3100 mils, 7100 mils): Symbol Q4 [Q_NMOS_GSD]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(3900 mils, 6900 mils): Symbol TP16 [TestPoint]
+[lib_symbol_mismatch]: Symbol 'SolderJumper_3_Bridged12' doesn't match copy in library 'Jumper'
+    ; warning
+    @(4600 mils, 2400 mils): Symbol JP2 [SolderJumper_3_Bridged12]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(7200 mils, 3800 mils): Symbol TP14 [TestPoint]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(7200 mils, 5400 mils): Symbol TP15 [TestPoint]
+[footprint_link_issues]: Footprint 'TestPoint_Keystone_5015_Micro-Minature' not found in library 'TestPoint'
+    ; warning
+    @(7200 mils, 7500 mils): Symbol TP17 [TestPoint]
+
+***** Sheet /power_in/
+
+***** Sheet /buck_5v/
+
+***** Sheet /mcu/
+
+***** Sheet /led_out/
+
+***** Sheet /encoder/
+
+ ** ERC messages: 175  Errors 0  Warnings 175
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

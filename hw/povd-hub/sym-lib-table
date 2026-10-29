@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "povd")(type "KiCad")(uri "${KIPRJMOD}/povd.kicad_sym")(options "")(descr "povd project symbols"))
+)

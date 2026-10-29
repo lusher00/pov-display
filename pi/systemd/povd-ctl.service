@@ -1,0 +1,14 @@
+[Unit]
+Description=povd rotor controller (VESC ramp, vibration protection, balancing, web UI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/povd/pi
+ExecStart=/usr/bin/python3 -m povd_ctl --conf /home/pi/povd/pi/povd.conf
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

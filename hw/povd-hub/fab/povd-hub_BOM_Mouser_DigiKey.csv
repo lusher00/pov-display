@@ -1,0 +1,17 @@
+Manufacturer Part Number,Manufacturer,Digi-Key Part Number,Quantity,Reference Designator,Description
+IHLP5050FDER2R2M01,Vishay Dale,541-1033-1-ND,2,L2,Inductor 2.2 uH Isat 40 A 4.2 mOhm 13.2x12.9x6.5 mm. Fallback: SRP1265A-2R2M (out until Jan 2027). 1 per board
+78438357082,Würth Elektronik,732-11745-1-ND,2,L1,"Inductor 8.2 uH WE-MAIA 4030, Isat 3.35 A (10%) / 6.8 A (30%), 86 mOhm max, 4.1x4.1x3.1 mm; land pattern identical to XAL4040 (1.39 gap, 3.35 span). 1 per board"
+T530X477M006ATE010,KEMET,399-4137-1-ND,8,"C23,C24,C25,C26","Polymer tantalum 470 uF 6.3 V 10 mOhm 7343-43, 4.0 mm tall. Fallback: T520D477M006ATE025. 4 per board"
+T520D227M006ATE015,KEMET,399-10341-1-ND,8,"C37,C38,C43,C44",Polymer tantalum 220 uF 6.3 V 15 mOhm 7343-31 (in stock on last check). 4 per board
+EEH-ZA1J470P,Panasonic,P124944CT-ND,2,C5,Hybrid polymer 47 uF 63 V 8x10.2 mm (in stock on last check). 1 per board
+GRM32EC72A106ME05L,Murata,,10,"C11,C12,C13,C14","MLCC 10 uF 100 V X7S 1210. Fallbacks: GRM32EC72A106KE05K, Samsung CL32Y106KCVZ4NE. 4 per board"
+GRM32DC72A475KE01L,Murata,,4,C6,MLCC 4.7 uF 100 V X7S 1210. Fallback: TDK C3225X7S2A475M200AB. 1 per board
+GRM32ER71A226KE20L,Murata,490-1876-1-ND,20,"C8,C27,C28,C29,C30,C31,C32",MLCC 22 uF 10 V X7R 1210 (in stock on last check). 7 per board
+CRF2512-FZ-R005ELF,Bourns,,4,R1,Shunt 5 mOhm 1% 2 W 2512. Fallback: Littelfuse L4CL2512LR005FYR. 1 per board
+0451007.MRL,Littelfuse,F2589CT-ND,4,F1,Fuse 7 A Nano2 451 SMD (in stock on last check). 1 per board
+SMCJ40A,Littelfuse,SMCJ40ALFCT-ND,10,D1,TVS 40 V unidirectional SMC. 1 per board
+5010,Keystone Electronics,36-5010-ND,10,"TP1,TP2,TP9",Test point red through-hole. 3 per board
+5011,Keystone Electronics,36-5011-ND,10,"TP3,TP4,TP5,TP6",Test point black through-hole. 4 per board
+43045-1618,Molex,,4,"J2,J3",Micro-Fit 3.0 header 2x8 vertical SMT with solder tabs. 2 per board
+PPTC091LFBN-RC,Sullins Connector Solutions,,4,U5,Female header 1x9 2.54 mm through-hole. 2 per board
+PRPC040SAAN-RC,Sullins Connector Solutions,,2,U5,Male header 1x40 2.54 mm breakaway; cut 2 x 9 per board. 1 per board

@@ -1,0 +1,21 @@
+VOUT set 4.988 V, fsw 401.6 kHz
+Qg at 7.5 V: Q2 20.4 nC, Q3 33.7 nC, total 54.1 nC
+L0 resonance: total C 2884 uF
+VIN 12 IOUT  5: D 0.416 ton 1035 ns  dI 3.30 A pk 6.6  Iin 2.19 A  eff 94.9%  loss 1.33 W | Q2 0.41 Q3 0.20 L 0.35 IC(LDO+drv) 0.21 snub 0.02 | Ivcc 24.7 mA  LDO 0.11 W  Icin_rms 2.5 A
+VIN 12 IOUT 15: D 0.416 ton 1035 ns  dI 3.30 A pk 16.6  Iin 6.57 A  eff 95.0%  loss 3.98 W | Q2 1.50 Q3 0.95 L 1.15 IC(LDO+drv) 0.21 snub 0.02 | Ivcc 24.7 mA  LDO 0.11 W  Icin_rms 7.4 A
+VIN 24 IOUT  5: D 0.208 ton  518 ns  dI 4.47 A pk 7.2  Iin 1.13 A  eff 91.8%  loss 2.23 W | Q2 0.70 Q3 0.30 L 0.36 IC(LDO+drv) 0.51 snub 0.08 | Ivcc 24.7 mA  LDO 0.41 W  Icin_rms 2.0 A
+VIN 24 IOUT 15: D 0.208 ton  518 ns  dI 4.47 A pk 17.2  Iin 3.32 A  eff 94.0%  loss 4.81 W | Q2 1.49 Q3 1.29 L 1.16 IC(LDO+drv) 0.51 snub 0.08 | Ivcc 24.7 mA  LDO 0.41 W  Icin_rms 6.1 A
+VIN 36 IOUT  5: D 0.139 ton  345 ns  dI 4.86 A pk 7.4  Iin 0.78 A  eff 88.4%  loss 3.26 W | Q2 1.07 Q3 0.38 L 0.36 IC(LDO+drv) 0.80 snub 0.17 | Ivcc 24.7 mA  LDO 0.70 W  Icin_rms 1.7 A
+VIN 36 IOUT 15: D 0.139 ton  345 ns  dI 4.86 A pk 17.4  Iin 2.24 A  eff 92.7%  loss 5.93 W | Q2 1.87 Q3 1.45 L 1.16 IC(LDO+drv) 0.80 snub 0.17 | Ivcc 24.7 mA  LDO 0.70 W  Icin_rms 5.2 A
+VIN 40 IOUT  5: D 0.125 ton  311 ns  dI 4.94 A pk 7.5  Iin 0.71 A  eff 87.3%  loss 3.63 W | Q2 1.20 Q3 0.41 L 0.36 IC(LDO+drv) 0.90 snub 0.21 | Ivcc 24.7 mA  LDO 0.80 W  Icin_rms 1.7 A
+VIN 40 IOUT 15: D 0.125 ton  311 ns  dI 4.94 A pk 17.5  Iin 2.03 A  eff 92.2%  loss 6.34 W | Q2 2.03 Q3 1.49 L 1.16 IC(LDO+drv) 0.90 snub 0.21 | Ivcc 24.7 mA  LDO 0.80 W  Icin_rms 5.0 A
+valley current limit (R_ILIM 360): [('min', 12.9), ('typ', 16.8), ('max', 20.6)]
+  VIN 12: dI 3.30, min avg out at limit 14.5 A, peak at typ limit 20.1 A
+  VIN 24: dI 4.47, min avg out at limit 15.1 A, peak at typ limit 21.3 A
+  VIN 40: dI 4.94, min avg out at limit 15.4 A, peak at typ limit 21.8 A
+f0 1998 Hz; fz1 1206, fz2 2191, fp1 34419, fp2 213980 Hz; mid-band EA gain 17.3
+15 A, nominal C              fc   29.3 kHz  PM  68.8 deg  GM   nan dB
+1 A, nominal C               fc   29.4 kHz  PM  68.4 deg  GM   nan dB
+15 A, C -40%                 fc   39.0 kHz  PM  52.0 deg  GM   nan dB
+15 A, C +30%                 fc   25.0 kHz  PM  76.7 deg  GM   nan dB
+15 A, blade caps not fitted  fc   43.7 kHz  PM  66.9 deg  GM   nan dB

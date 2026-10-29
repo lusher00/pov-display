@@ -1,0 +1,17 @@
+Designator,Qty,Part,Spec,Footprint,Side
+L2,1,2.2 uH power inductor,Vishay IHLP5050FDER2R2M01 (DigiKey 541-1033-1-ND) or Bourns SRP1270-2R2M (LCSC C2041460),L_Wuerth_HCI-1365,Bottom
+L1,1,8.2 uH inductor,"Würth 78438357082 WE-MAIA 4030 (DigiKey 732-11745-1-ND; Isat 3.35 A @10%, 86 mOhm; same land as XAL4040). Alternate: Coilcraft XAL4040-822MEC (LCSC C19191624)",L_Coilcraft_XAL4040,Bottom
+"C23,C24,C25,C26",4,470 uF 6.3 V polymer,KEMET T520D477M006ATE015 (LCSC C696809),CP_EIA-7343-31_Kemet-D,Bottom
+"C37,C38,C43,C44",4,220 uF 6.3 V polymer,"KEMET T520V227M006ATE012 (LCSC C156462; 7343-19, same land)",CP_EIA-7343-31_Kemet-D,Bottom
+C5,1,47 uF 63 V,Panasonic EEH-ZA1J470P hybrid polymer (DigiKey P124944CT-ND); LCSC fallback Chemi-Con EMVE630ARA470MHA0G electrolytic,CP_Elec_8x10,Bottom
+"C11,C12,C13,C14",4,10 uF 100 V,"X7S 1210 (Murata GRM32EC72A106KE05L, LCSC C576517)",C_1210,Bottom
+C6,1,4.7 uF 100 V,"X7S 1210 (Murata GRM32DC72A475KE01L, LCSC C437566)",C_1210,Bottom
+"C8,C27,C28,C29,C30,C31,C32",7,22 uF 25 V,"X7R 1210 (Murata GRM32ER71E226KE15L, LCSC C21397)",C_1210,Bottom
+R1,1,5 mOhm 1 W,"2512 current shunt (Vishay WSL25125L000FEA, LCSC C844900)",R_2512,Bottom
+F1,1,7 A fuse,Littelfuse 0451007.MRL (LCSC C99548),Fuse_Littelfuse-NANO2-451_453,Bottom
+D1,1,SMCJ40A,"40 V unidirectional TVS, SMC (Littelfuse SMCJ40A, LCSC C224052)",D_SMC,Bottom
+J1,1,XT30UPB-M,Amass vertical PCB male (through-hole),AMASS_XT30UPB-M,Top
+U5,1,Waveshare ESP32-S3-Zero,"no headers; Yxcon F185-1109A0ASYE3 1x9 female (LCSC C7494789) x2 on board, 2 x 9 pins cut from 1x40 male strip (LCSC C2337) on the module",Waveshare_ESP32-S3-Zero_Header,Top
+"TP1,TP2,TP9",3,Keystone 5010,"red multipurpose test point (through-hole), LCSC C2906765",TestPoint_Keystone_5010-5014,Top
+"TP3,TP4,TP5,TP6",4,Keystone 5011,"black multipurpose test point (through-hole), LCSC C238127",TestPoint_Keystone_5010-5014,Top
+"J2,J3",2,Molex 43045-1618,Micro-Fit 3.0 2x8 vertical SMT header; not stocked at LCSC. Mouser 538-43045-1618 (in stock) via JLC global sourcing,Micro-Fit_3.0_43045-1618_2x08-1MP_P3.00mm_Vertical,Top
