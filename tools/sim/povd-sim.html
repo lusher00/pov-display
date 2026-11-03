@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POVD Rotor Simulator</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: instrument panel. Config column of typed fields on the left, two drawings and a readout on the right. */
+:root{
+  --bg:#f3f2ee; --panel:#ffffff; --fg:#1b1d1f; --mute:#5f6469; --line:#d5d3cc;
+  --accent:#b8441b; --accent2:#1f6f8b; --warn:#b8441b; --ok:#2e7d4f; --grid:#e9e7e0;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace; --sans:"IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141617; --panel:#1d2022; --fg:#e8e6e0; --mute:#9aa0a6; --line:#33383c;
+  --accent:#e8763f; --accent2:#5fb3cf; --warn:#e8763f; --ok:#6cc08e; --grid:#262a2d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141617; --panel:#1d2022; --fg:#e8e6e0; --mute:#9aa0a6; --line:#33383c;
+  --accent:#e8763f; --accent2:#5fb3cf; --warn:#e8763f; --ok:#6cc08e; --grid:#262a2d; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--sans);box-sizing:border-box;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 8px}
+h1{font:600 16px var(--mono);margin:0;letter-spacing:.02em;flex:none}
+.sub{display:none}
+.wrap{display:grid;grid-template-columns:290px minmax(0,1fr);gap:12px;flex:1;min-height:0}
+@media(max-width:860px){body{overflow:auto;display:block;height:auto}.wrap{grid-template-columns:1fr}}
+.cfg{background:var(--panel);border:1px solid var(--line);padding:10px;display:grid;gap:10px;min-width:0;overflow-y:auto;min-height:0;align-content:start}
+fieldset{border:0;padding:0;margin:0;display:grid;gap:6px}
+legend{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding:0;margin-bottom:4px}
+.row{display:grid;grid-template-columns:1fr 92px;gap:8px;align-items:center}
+.row label{font:500 13px var(--mono);word-break:break-all}
+.row small{display:block;font:11px var(--sans);color:var(--mute)}
+input[type=number],select{font:13px var(--mono);padding:4px 6px;border:1px solid var(--line);background:var(--bg);color:var(--fg);width:100%;box-sizing:border-box;border-radius:2px}
+input:focus,select:focus{outline:2px solid var(--accent2);outline-offset:1px}
+.row input[type=checkbox]{width:18px;height:18px;justify-self:start;accent-color:var(--accent)}
+.right{display:grid;grid-template-rows:minmax(0,1fr) auto auto;gap:12px;min-width:0;min-height:0}
+.viz{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:12px;min-height:0}
+@media(max-width:700px){.viz{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);padding:10px;min-width:0;min-height:0;display:flex;flex-direction:column}
+.card h2{font:600 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 6px;flex:none}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+canvas{display:block;background:#000;border-radius:2px}
+#blade{background:var(--bg)}
+.out{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px 14px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:8px;border-bottom:1px solid var(--grid);padding:2px 0;font:12px var(--mono);font-variant-numeric:tabular-nums}
+.kv span:first-child{color:var(--mute);word-break:break-all}
+.kv.bad span:last-child{color:var(--warn);font-weight:600}
+.kv.ok span:last-child{color:var(--ok)}
+.src{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px;font:12px var(--sans);color:var(--mute);flex:none}
+.src input[type=file]{font:12px var(--sans)}
+button{font:12px var(--mono);padding:4px 10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:2px;cursor:pointer}
+button:focus{outline:2px solid var(--accent2)}
+.note{font:11px var(--sans);color:var(--mute);margin-top:4px;flex:none}
+.seq textarea{font:11px var(--mono);width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;min-height:52px}
+.seq .src{margin:0 0 6px}
+#seq_status{font:11px var(--mono);color:var(--accent2)}
+</style></head><body>
+
+<h1>POVD Rotor Simulator</h1>
+<p class="sub">Geometry, resolution, power and load for the two-blade POV display. Every field is a config key; the drawing on the left is what a viewer sees from the front, the one on the right is the strip layout on one blade.</p>
+
+<div class="wrap">
+<form class="cfg" id="f" onsubmit="return false">
+  <fieldset><legend>Rotor</legend>
+    <div class="row"><label for="blades">blades</label><input type="number" id="blades" value="4" min="1" max="4" step="1"></div>
+    <div class="row"><label for="blade_len_mm">blade_len_mm</label><input type="number" id="blade_len_mm" value="600" step="10"></div>
+    <div class="row"><label for="chord_mm">chord_mm</label><input type="number" id="chord_mm" value="60" step="1"></div>
+    <div class="row"><label for="r0_mm">r0_mm<small>radius of first LED</small></label><input type="number" id="r0_mm" value="70" step="5"></div>
+    <div class="row"><label for="rpm">rpm</label><input type="number" id="rpm" value="500" step="50"></div>
+  </fieldset>
+  <fieldset><legend>Strips</legend>
+    <div class="row"><label for="strips_per_blade">strips_per_blade</label><input type="number" id="strips_per_blade" value="2" min="1" max="12" step="1"></div>
+    <div class="row"><label for="leds_per_strip">leds_per_strip</label><input type="number" id="leds_per_strip" value="62" step="1"></div>
+    <div class="row"><label for="led_pitch_mm">led_pitch_mm</label><input type="number" id="led_pitch_mm" value="8.06" step="0.01"></div>
+    <div class="row"><label for="strip_w_mm">strip_w_mm</label><input type="number" id="strip_w_mm" value="12" step="1"></div>
+    <div class="row"><label for="strip_g_per_m">strip_g_per_m</label><input type="number" id="strip_g_per_m" value="32" step="1"></div>
+    <div class="row"><label for="strip_mode">strip_mode<small>how extra strips are used</small></label>
+      <select id="strip_mode">
+        <option value="radial">radial</option>
+        <option value="angular">angular</option>
+        <option value="duplicate">duplicate</option>
+      </select></div>
+  </fieldset>
+  <fieldset><legend>Spin</legend>
+    <div class="row"><label for="spin">spin</label><input type="checkbox" id="spin" checked></div>
+    <div class="row"><label for="spin_slowdown"><span>spin_slowdown</span><small>1 = real time, 250 = 500 rpm shown at 2 rpm</small></label><input type="number" id="spin_slowdown" value="250" min="1" step="10"></div>
+    <div class="row"><label for="persist_ms"><span>persist_ms</span><small>viewer's eye, wall-clock ms; 0 = trail never fades</small></label><input type="number" id="persist_ms" value="60" min="0" step="10"></div>
+    <div class="row"><label for="display_hz"><span>display_hz</span><small>0 = measured from the browser's frame rate</small></label><input type="number" id="display_hz" value="0" min="0" step="1"></div>
+  </fieldset>
+  <fieldset><legend>Timing</legend>
+    <div class="row"><label for="columns_per_rev">columns_per_rev</label><input type="number" id="columns_per_rev" value="720" step="10"></div>
+    <div class="row"><label for="clk_mhz">clk_mhz</label><input type="number" id="clk_mhz" value="20" step="1"></div>
+    <div class="row"><label for="channels">channels<small>per hub board</small></label><input type="number" id="channels" value="8" step="1"></div>
+  </fieldset>
+  <fieldset><legend>Power</legend>
+    <div class="row"><label for="led_ma_full">led_ma_full</label><input type="number" id="led_ma_full" value="60" step="1"></div>
+    <div class="row"><label for="img_avg_pct">img_avg_pct<small>mean drive of a typical image</small></label><input type="number" id="img_avg_pct" value="20" step="5"></div>
+    <div class="row"><label for="boards">boards</label><input type="number" id="boards" value="1" min="1" max="2" step="1"></div>
+    <div class="row"><label for="rail_a">rail_a<small>5 V rating per board</small></label><input type="number" id="rail_a" value="15" step="1"></div>
+    <div class="row"><label for="rotor_v">rotor_v</label><input type="number" id="rotor_v" value="42" step="1"></div>
+    <div class="row"><label for="buck_eff">buck_eff</label><input type="number" id="buck_eff" value="0.92" step="0.01"></div>
+    <div class="row"><label for="ring_a_max">ring_a_max</label><input type="number" id="ring_a_max" value="5" step="0.5"></div>
+  </fieldset>
+</form>
+
+<div class="right">
+  <div class="viz">
+    <div class="card"><h2>Display, front view</h2>
+      <div class="stage"><canvas id="disp" width="700" height="700"></canvas></div>
+      <div class="src">
+        <button type="button" id="pat_grid">test grid</button>
+        <button type="button" id="pat_text">text</button>
+        <button type="button" id="pat_photo">rings</button>
+        <label>image <input type="file" id="img" accept="image/*"></label>
+        <label><input type="checkbox" id="show_dots" checked> show pixels</label>
+      </div>
+      <p class="note" id="dispnote"></p>
+    </div>
+    <div class="card"><h2>One blade, top view</h2>
+      <div class="stage"><canvas id="blade" width="260" height="700"></canvas></div>
+      <p class="note" id="bladenote"></p>
+    </div>
+  </div>
+  <div class="card"><h2>Readout</h2><div class="out" id="out"></div></div>
+  <div class="card seq"><h2>Sequence</h2>
+    <div class="src"><button type="button" id="seq_run">run</button><button type="button" id="seq_stop">stop</button>
+      <label>sequence file <input type="file" id="seq_file" accept=".json,application/json"></label><span id="seq_status"></span></div>
+    <textarea id="sequence" rows="4" spellcheck="false">[
+ {"t":0,  "set":{"blades":2,"strips_per_blade":1,"rpm":500,"spin_slowdown":250,"persist_ms":60}, "pattern":"grid"},
+ {"t":4,  "set":{"spin_slowdown":60}}, {"t":6, "set":{"spin_slowdown":15}}, {"t":8, "set":{"spin_slowdown":4}}, {"t":10, "set":{"spin_slowdown":1}},
+ {"t":14, "pattern":"rings"}, {"t":17, "set":{"spin_slowdown":4}}, {"t":20, "pattern":"text"}, {"t":21, "set":{"spin_slowdown":1}},
+ {"t":25, "set":{"spin_slowdown":2.5}}, {"t":28, "set":{"strips_per_blade":2}}, {"t":31, "set":{"blades":3}}, {"t":34, "set":{"blades":4}},
+ {"t":37, "set":{"blades":2}}, {"t":40, "set":{"strips_per_blade":4}}, {"t":43, "set":{"blades":3}}, {"t":46, "set":{"blades":4}}
+]</textarea>
+    <p class="note">Entries run at wall-clock <code>t</code> seconds: <code>set</code> writes config keys, <code>pattern</code> is grid / text / rings, <code>load</code> is an image or GIF URL. See README.md.</p>
+  </div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const keys=['blades','blade_len_mm','chord_mm','r0_mm','rpm','strips_per_blade','leds_per_strip','led_pitch_mm','strip_w_mm','strip_g_per_m','strip_mode','spin_slowdown','persist_ms','display_hz','columns_per_rev','clk_mhz','channels','led_ma_full','img_avg_pct','boards','rail_a','rotor_v','buck_eff','ring_a_max'];
+function cfg(){const c={};for(const k of keys){const e=$(k);c[k]=e.tagName==='SELECT'?e.value:+e.value}return c}
+
+// ---- source image (offscreen) ----
+const SRC=512, src=document.createElement('canvas');src.width=src.height=SRC;const sx=src.getContext('2d');
+function patGrid(){sx.fillStyle='#000';sx.fillRect(0,0,SRC,SRC);sx.strokeStyle='#fff';sx.lineWidth=2;
+  for(let i=0;i<=SRC;i+=SRC/16){sx.beginPath();sx.moveTo(i,0);sx.lineTo(i,SRC);sx.moveTo(0,i);sx.lineTo(SRC,i);sx.stroke()}
+  sx.strokeStyle='#e8763f';sx.lineWidth=4;sx.beginPath();sx.arc(SRC/2,SRC/2,SRC*0.45,0,7);sx.stroke();
+  sx.beginPath();sx.moveTo(SRC/2,SRC/2);sx.lineTo(SRC/2,SRC*0.08);sx.stroke()}
+function patText(){sx.fillStyle='#000';sx.fillRect(0,0,SRC,SRC);sx.fillStyle='#fff';sx.textAlign='center';sx.textBaseline='middle';
+  sx.font='bold 120px IBM Plex Sans,sans-serif';sx.fillText('POVD',SRC/2,SRC*0.40);
+  sx.font='48px IBM Plex Mono,monospace';sx.fillStyle='#5fb3cf';sx.fillText('rotor display',SRC/2,SRC*0.62);
+  sx.font='28px IBM Plex Mono,monospace';sx.fillStyle='#aaa';sx.fillText('abcdefghijklm',SRC/2,SRC*0.78)}
+function patRings(){const g=sx.createRadialGradient(SRC/2,SRC/2,0,SRC/2,SRC/2,SRC/2);
+  for(let i=0;i<=10;i++)g.addColorStop(i/10,`hsl(${i*36},90%,${i%2?55:30}%)`);sx.fillStyle=g;sx.fillRect(0,0,SRC,SRC);
+  sx.fillStyle='#fff';for(let a=0;a<360;a+=30){const r=SRC*0.42,x=SRC/2+r*Math.cos(a*Math.PI/180),y=SRC/2+r*Math.sin(a*Math.PI/180);sx.beginPath();sx.arc(x,y,8,0,7);sx.fill()}}
+// the LEDs read their colours from srcImg (RGBA bytes of the 512x512 source) at paint time, so the
+// source can change every frame (animated GIF) without recomputing geometry
+let srcImg=null, anim=null;   // anim: {frames:[{img,delay_ms}], i, t}
+function commitSource(){srcImg=sx.getImageData(0,0,SRC,SRC).data}
+function fitDraw(im,w,h){sx.fillStyle='#000';sx.fillRect(0,0,SRC,SRC);const sc=Math.max(SRC/w,SRC/h);sx.drawImage(im,(SRC-w*sc)/2,(SRC-h*sc)/2,w*sc,h*sc)}
+function useStatic(fn){anim=null;fn();commitSource();if(!($('spin').checked&&raf))draw()}
+$('pat_grid').onclick=()=>useStatic(patGrid);$('pat_text').onclick=()=>useStatic(patText);$('pat_photo').onclick=()=>useStatic(patRings);
+async function loadSource(blob){
+  if(blob.type==='image/gif'&&'ImageDecoder'in window){
+    const dec=new ImageDecoder({data:await blob.arrayBuffer(),type:'image/gif'});await dec.tracks.ready;
+    const n=dec.tracks.selectedTrack.frameCount;const frames=[];
+    for(let i=0;i<n;i++){const {image}=await dec.decode({frameIndex:i});fitDraw(image,image.displayWidth,image.displayHeight);
+      frames.push({img:sx.getImageData(0,0,SRC,SRC).data,delay_ms:Math.max(20,(image.duration||100000)/1000)});image.close()}
+    anim={frames,i:0,t:0};srcImg=frames[0].img;if(!($('spin').checked&&raf))draw();return}
+  const im=new Image();await new Promise((res,rej)=>{im.onload=res;im.onerror=rej;im.src=URL.createObjectURL(blob)});
+  anim=null;fitDraw(im,im.width,im.height);URL.revokeObjectURL(im.src);commitSource();if(!($('spin').checked&&raf))draw()}
+$('img').onchange=e=>{const f=e.target.files[0];if(f)loadSource(f)};
+
+// ---- geometry: list of LED sample points for one blade face ----
+// returns [{r_mm, dtheta_deg (lead/lag vs blade axis), face}]
+function ledLayout(c){
+  const L=[];const n=c.strips_per_blade;
+  const span=(n-1)*c.strip_w_mm; // strips centred on the blade chord
+  for(let s=0;s<n;s++){
+    const chord=(s*c.strip_w_mm)-span/2; // mm off the blade axis
+    let radOff=0, face=0, angOff=null;
+    if(c.strip_mode==='radial') radOff=(s/n)*c.led_pitch_mm;             // stagger along the blade
+    else if(c.strip_mode==='angular') angOff=(s/n)*(360/c.columns_per_rev); // firmware phases each strip by a fraction of a column
+    else if(c.strip_mode==='back') face=s%2;                              // alternate strips on the back face
+    for(let i=0;i<c.leds_per_strip;i++){
+      const r=c.r0_mm+i*c.led_pitch_mm+radOff;
+      if(r>c.blade_len_mm+c.r0_mm) break;
+      // a strip off the blade axis sweeps the same radius at a different angle; firmware normally cancels this, so for radial/duplicate/back we treat it as cancelled
+      const dth = angOff!==null ? angOff : 0;
+      L.push({r,dth,face,s,chord});
+    }
+  }
+  return L;
+}
+
+// ---- display render ----
+const disp=$('disp'),dx=disp.getContext('2d');const W=disp.width;
+// trail: the persistence image as a pixel buffer. Each LED's pixel footprint per column is
+// precomputed, so painting a column is a few thousand array writes and fading is one pass.
+const timg=dx.createImageData(W,W);const t8=timg.data;const t32=new Uint32Array(t8.buffer);
+let frame=null;
+function prepare(){
+  const c=cfg();const cx=W/2,cy=W/2;
+  const Rmax=c.r0_mm+c.blade_len_mm;const k=(W/2-6)/Rmax;
+  const L=ledLayout(c).filter(l=>l.face===0);
+  if(!srcImg)commitSource();
+  const cols=c.columns_per_rev;const dotR=Math.max(1,c.led_pitch_mm*k*0.42);
+  const half=Math.max(1,Math.round(dotR));const side=2*half;          // dot footprint in pixels
+  const sidx=new Array(cols),pix=new Array(cols);
+  for(let col=0;col<cols;col++){
+    const th0=col*360/cols;const si=new Int32Array(L.length),px=new Int32Array(L.length*2);
+    for(let j=0;j<L.length;j++){const l=L[j];const th=(th0+l.dth)*Math.PI/180;
+      const ux=Math.min(SRC-1,Math.max(0,Math.round(SRC/2+(l.r/Rmax)*(SRC/2)*Math.cos(th)))),uy=Math.min(SRC-1,Math.max(0,Math.round(SRC/2+(l.r/Rmax)*(SRC/2)*Math.sin(th))));
+      si[j]=(uy*SRC+ux)*4;
+      px[2*j]=Math.round(cx+l.r*k*Math.cos(th))-half;px[2*j+1]=Math.round(cy+l.r*k*Math.sin(th))-half}
+    sidx[col]=si;pix[col]=px}
+  frame={c,L,cols,k,cx,cy,Rmax,dotR,side,showDots:$('show_dots').checked,sidx,pix};
+  return frame;
+}
+function paintColumn(f,col){            // into the trail buffer, colours from the current source frame
+  const si=f.sidx[col],px=f.pix[col],side=f.side,n=f.L.length,im=srcImg;
+  for(let j=0;j<n;j++){const x0=px[2*j],y0=px[2*j+1],i=si[j],v=(0xff000000|im[i+2]<<16|im[i+1]<<8|im[i])>>>0;
+    for(let y=y0;y<y0+side;y++){if(y<0||y>=W)continue;let o=y*W+x0;for(let x=x0;x<x0+side;x++,o++){if(x>=0&&x<W)t32[o]=v}}}
+}
+function paintColumnArcs(f,col){        // static view without "show pixels": swept arcs, on the canvas
+  const {L,cols,k,cx,cy,c}=f;const th0=col*360/cols;const si=f.sidx[col],im=srcImg;
+  for(let j=0;j<L.length;j++){const l=L[j];const th=(th0+l.dth)*Math.PI/180;const i=si[j];
+    dx.strokeStyle=`rgb(${im[i]},${im[i+1]},${im[i+2]})`;dx.lineWidth=Math.max(1,c.led_pitch_mm*k*0.9);dx.beginPath();dx.arc(cx,cy,l.r*k,th-Math.PI/cols,th+Math.PI/cols);dx.stroke()}
+}
+function clearTrail(){t32.fill(0xff000000)}
+function fadeTrail(a){const m=1-a;for(let i=0;i<t8.length;i+=4){t8[i]=t8[i]*m;t8[i+1]=t8[i+1]*m;t8[i+2]=t8[i+2]*m}}
+function paintHub(f){dx.fillStyle='#222';dx.beginPath();dx.arc(f.cx,f.cy,f.c.r0_mm*f.k*0.9,0,7);dx.fill()}
+function paintBlades(f,angDeg){
+  const {c,k,cx,cy,L,cols}=f;const n=c.blades;
+  const stripsN=c.strips_per_blade;const span=(stripsN-1)*c.strip_w_mm;
+  for(let b=0;b<n;b++){const th=(angDeg+b*360/n)*Math.PI/180;
+    const col=((Math.floor((angDeg+b*360/n)/(360/cols))%cols)+cols)%cols;const si=f.sidx[col],im=srcImg;
+    const arr=new Array(L.length);for(let j=0;j<L.length;j++){const i=si[j];arr[j]=`rgb(${im[i]},${im[i+1]},${im[i+2]})`}
+    dx.save();dx.translate(cx,cy);dx.rotate(th);
+    dx.fillStyle='#3a3d40';dx.fillRect(c.r0_mm*k-4,-c.chord_mm*k/2,c.blade_len_mm*k+4,c.chord_mm*k);
+    dx.strokeStyle='#777';dx.lineWidth=1;dx.strokeRect(c.r0_mm*k-4,-c.chord_mm*k/2,c.blade_len_mm*k+4,c.chord_mm*k);
+    for(let s=0;s<stripsN;s++){const y=(s*c.strip_w_mm-span/2)*k;dx.fillStyle='#1a1a1a';dx.fillRect(c.r0_mm*k,y-c.strip_w_mm*k*0.4,c.leds_per_strip*c.led_pitch_mm*k,c.strip_w_mm*k*0.8)}
+    const dot=Math.max(2,c.led_pitch_mm*k*0.45);
+    dx.globalAlpha=0.35;for(let j=0;j<L.length;j++){const l=L[j];dx.fillStyle=arr[j];dx.fillRect(l.r*k-dot*2,l.chord*k-dot*2,dot*4,dot*4)}
+    dx.globalAlpha=1;for(let j=0;j<L.length;j++){const l=L[j];dx.fillStyle=arr[j];dx.fillRect(l.r*k-dot,l.chord*k-dot,dot*2,dot*2)}
+    dx.restore()}
+}
+function draw(){
+  const f=prepare();
+  dx.fillStyle='#000';dx.fillRect(0,0,W,W);clearTrail();
+  if(!$('spin').checked){
+    if(f.showDots){for(let col=0;col<f.cols;col++)paintColumn(f,col);dx.putImageData(timg,0,0)}
+    else for(let col=0;col<f.cols;col++)paintColumnArcs(f,col);
+    paintHub(f)}
+  else{simAng=0;simLast=null;fadeAcc=0}
+  drawBlade(f.c);readout(f.c,f.L);
+  if($('spin').checked&&!raf)raf=requestAnimationFrame(tick);
+}
+// ---- spin animation ----
+let raf=null,simAng=0,simLast=null,fadeAcc=0;
+// display refresh: requestAnimationFrame runs once per display frame, so its period is the refresh rate
+let hzMeasured=0,hzSamples=[];
+function measureHz(ts){if(hzSamples.length&&ts-hzSamples[hzSamples.length-1]<100)hzSamples.push(ts);else hzSamples=[ts];
+  if(hzSamples.length>=90){const d=[];for(let i=1;i<hzSamples.length;i++)d.push(hzSamples[i]-hzSamples[i-1]);d.sort((a,b)=>a-b);
+    hzMeasured=Math.round(1000/d[d.length>>1]);hzSamples=[]}}
+function displayHz(){const o=+$('display_hz').value;return o>0?o:(hzMeasured||60)}
+function tick(ts){
+  if(!$('spin').checked){raf=null;draw();return}
+  measureHz(ts);
+  if(simLast===null)simLast=ts;
+  // one display frame of wall time; a stalled tab is clamped to 3 frames so the rotor doesn't jump
+  const dtReal=Math.min(3000/displayHz(),ts-simLast);simLast=ts;
+  seqTick(ts);
+  step(dtReal);
+  raf=requestAnimationFrame(tick);
+}
+// advance the simulation by dtReal ms of wall time and compose one frame
+function step(dtReal){
+  const f=frame;const c=f.c;
+  const dtSim=dtReal/Math.max(1,c.spin_slowdown);          // ms of rotor time this frame
+  const degPerMs=c.rpm*360/60000;
+  const dAng=degPerMs*dtSim;
+  // persistence: the viewer's eye, in wall-clock time (so slowing the playback down shows the LEDs chasing)
+  if(c.persist_ms>0){fadeAcc+=1-Math.exp(-dtReal/c.persist_ms);if(fadeAcc>=0.02){fadeTrail(Math.min(1,fadeAcc));fadeAcc=0}}
+  // animated source: advance frames in wall-clock time
+  if(anim){anim.t+=dtReal;while(anim.t>=anim.frames[anim.i].delay_ms){anim.t-=anim.frames[anim.i].delay_ms;anim.i=(anim.i+1)%anim.frames.length}srcImg=anim.frames[anim.i].img}
+  // paint every column each blade crossed this frame (at most once per column per frame)
+  const colW=360/f.cols;const n=c.blades;
+  const s0=Math.floor(simAng/colW),s1=Math.min(Math.floor((simAng+dAng)/colW),s0+Math.ceil(f.cols/n));
+  for(let col=s0;col<=s1;col++)for(let b=0;b<n;b++){const cc=((col+Math.round(b*f.cols/n))%f.cols+f.cols)%f.cols;paintColumn(f,cc)}
+  simAng=(simAng+dAng)%360;
+  dx.putImageData(timg,0,0);paintHub(f);paintBlades(f,simAng);
+}
+// scripted use (demo renderer): set config keys without resetting the trail, then step()
+// ---- sequence runner: entries {t, set?, pattern?, load?} applied at wall-clock t seconds after run
+let seq=null; // {entries, t0, i}
+function seqRun(entries){seq={entries:entries.slice().sort((a,b)=>a.t-b.t),t0:null,i:0};
+  if(!$('spin').checked){$('spin').checked=true;draw()}$('seq_status').textContent='running'}
+function seqStop(){seq=null;$('seq_status').textContent=''}
+function seqTick(ts){if(!seq)return;if(seq.t0===null)seq.t0=ts;const t=(ts-seq.t0)/1000;
+  while(seq.i<seq.entries.length&&seq.entries[seq.i].t<=t){const e=seq.entries[seq.i++];
+    if(e.set)povd.set(e.set);if(e.pattern&&povd.pattern[e.pattern])povd.pattern[e.pattern]();if(e.load)povd.load(e.load)}
+  $('seq_status').textContent=seq.i<seq.entries.length?`running t=${t.toFixed(1)} s (${seq.i}/${seq.entries.length})`:`done (${seq.entries.length} entries)`;
+  if(seq.i>=seq.entries.length)seq=null}
+$('seq_run').onclick=()=>{try{seqRun(JSON.parse($('sequence').value))}catch(e){$('seq_status').textContent='bad JSON: '+e.message}};
+$('seq_stop').onclick=seqStop;
+$('seq_file').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{$('sequence').value=t})};
+window.povd={
+  run:seqRun,stopSequence:seqStop,
+  set(o){for(const k in o){const e=$(k);if(!e)continue;if(e.type==='checkbox')e.checked=!!o[k];else e.value=o[k]}
+         const keepAng=simAng;frame=prepare();simAng=keepAng;drawBlade(frame.c);readout(frame.c,frame.L)},
+  reset(){clearTrail();simAng=0;fadeAcc=0;frame=prepare()},
+  step,stop(){if(raf){cancelAnimationFrame(raf);raf=null}},
+  pattern:{grid:()=>useStatic(patGrid),text:()=>useStatic(patText),rings:()=>useStatic(patRings)},
+  async load(dataUrl){const r=await fetch(dataUrl);await loadSource(await r.blob())},
+};
+
+// ---- blade layout drawing ----
+const bl=$('blade'),bx=bl.getContext('2d');
+function drawBlade(c){
+  const W=bl.width,H=bl.height;const css=getComputedStyle(document.documentElement);
+  bx.fillStyle=css.getPropertyValue('--bg');bx.fillRect(0,0,W,H);
+  const Rmax=c.r0_mm+c.blade_len_mm;const k=(H-40)/Rmax;const kx=Math.min(k,(W-40)/Math.max(c.chord_mm,c.strips_per_blade*c.strip_w_mm));
+  const ax=W/2;const y=r=>H-20-r*k;
+  // blade outline
+  bx.fillStyle=css.getPropertyValue('--grid');bx.fillRect(ax-c.chord_mm*kx/2,y(Rmax),c.chord_mm*kx,c.blade_len_mm*k);
+  bx.strokeStyle=css.getPropertyValue('--line');bx.strokeRect(ax-c.chord_mm*kx/2,y(Rmax),c.chord_mm*kx,c.blade_len_mm*k);
+  // hub
+  bx.fillStyle=css.getPropertyValue('--mute');bx.beginPath();bx.arc(ax,y(0),10,0,7);bx.fill();
+  // strips
+  const L=ledLayout(c);
+  for(const l of L){
+    const px=ax+l.chord*kx;
+    bx.fillStyle=l.face?css.getPropertyValue('--accent2'):css.getPropertyValue('--accent');
+    bx.fillRect(px-c.strip_w_mm*kx/2+1,y(l.r)-1,c.strip_w_mm*kx-2,2);
+  }
+  const over=c.strips_per_blade*c.strip_w_mm>c.chord_mm;
+  $('bladenote').textContent=over?`${c.strips_per_blade} strips x ${c.strip_w_mm} mm = ${c.strips_per_blade*c.strip_w_mm} mm, wider than the ${c.chord_mm} mm chord. Use strip_mode=back or narrower strips.`:
+    `${c.strips_per_blade} strips x ${c.strip_w_mm} mm on a ${c.chord_mm} mm chord.`;
+}
+
+// ---- numbers ----
+function readout(c,Lfront){
+  const o=[];const kv=(k,v,cls='')=>o.push(`<div class="kv ${cls}"><span>${k}</span><span>${v}</span></div>`);
+  const Lall=ledLayout(c);
+  const strips=c.blades*c.strips_per_blade, leds=strips*c.leds_per_strip;
+  const Rmax=c.r0_mm+c.blade_len_mm;
+  const radialPx=new Set(Lfront.map(l=>Math.round(l.r*10))).size;
+  const angCols=c.strip_mode==='angular'?c.columns_per_rev*c.strips_per_blade:c.columns_per_rev;
+  const refresh=c.rpm/60*c.blades;
+  const tipPitch=2*Math.PI*Rmax/angCols;
+  kv('display_dia_mm',(2*Rmax).toFixed(0));
+  kv('refresh_hz',refresh.toFixed(1),refresh<24?'bad':'ok');
+  kv('rpm_shown',(c.rpm/Math.max(1,c.spin_slowdown)).toFixed(1));
+  kv('display_hz_used',displayHz()+(+c.display_hz>0?' (set)':hzMeasured?' (measured)':' (assumed)'));
+  kv('deg_per_frame',(c.rpm/Math.max(1,c.spin_slowdown)*6/displayHz()).toFixed(1));
+  kv('radial_px',radialPx);
+  kv('angular_cols',angCols);
+  kv('tip_col_pitch_mm',tipPitch.toFixed(1));
+  kv('radial_pitch_mm',(c.strip_mode==='radial'?c.led_pitch_mm/c.strips_per_blade:c.led_pitch_mm).toFixed(2));
+  kv('front_face_leds',Lfront.length*c.blades);
+  // data timing
+  const chansNeeded=strips, chansAvail=c.channels*c.boards;
+  const chain=Math.ceil(chansNeeded/chansAvail);
+  const bitsPerCol=(chain*c.leds_per_strip+2)*32;
+  const tCol_us=bitsPerCol/c.clk_mhz;
+  const colBudget_us=60e6/c.rpm/c.columns_per_rev;
+  kv('strips_per_channel',chain,chain>2?'bad':'');
+  kv('t_column_us',tCol_us.toFixed(0)+' / '+colBudget_us.toFixed(0),tCol_us>colBudget_us?'bad':'ok');
+  kv('max_columns_at_rpm',Math.floor(60e6/c.rpm/tCol_us));
+  // power
+  const aFull=leds*c.led_ma_full/1000, aTyp=aFull*c.img_avg_pct/100, cap=c.boards*c.rail_a;
+  const bright=Math.min(1,cap/aTyp);
+  const ringTyp=Math.min(aTyp,cap)*5/c.buck_eff/c.rotor_v, ringFull=Math.min(aFull,cap)*5/c.buck_eff/c.rotor_v;
+  kv('i5_full_white_a',aFull.toFixed(1),aFull>cap?'bad':'ok');
+  kv('i5_typical_a',aTyp.toFixed(1),aTyp>cap?'bad':'ok');
+  kv('rail_cap_a',cap);
+  kv('brightness_cap_pct',(bright*100).toFixed(0),bright<1?'bad':'ok');
+  kv('p5_typical_w',(Math.min(aTyp,cap)*5).toFixed(0));
+  kv('i_ring_typical_a',ringTyp.toFixed(2),ringTyp>c.ring_a_max?'bad':'ok');
+  kv('i_ring_at_cap_a',ringFull.toFixed(2),ringFull>c.ring_a_max?'bad':'ok');
+  // mass / load
+  const stripLen=c.leds_per_strip*c.led_pitch_mm/1000;
+  const mStrip=stripLen*c.strip_g_per_m/1000; // kg
+  const w=c.rpm*2*Math.PI/60;
+  const rMid=(c.r0_mm+ (c.r0_mm+stripLen*1000))/2/1000;
+  const fPerStrip=mStrip*w*w*rMid;
+  const gTip=w*w*Rmax/1000/9.81;
+  kv('strip_len_m',stripLen.toFixed(2),stripLen*1000>c.blade_len_mm?'bad':'');
+  kv('mass_per_blade_g',(mStrip*1000*c.strips_per_blade).toFixed(0));
+  kv('g_at_tip',gTip.toFixed(0));
+  kv('f_strip_pull_n',fPerStrip.toFixed(0));
+  kv('f_blade_pull_n',(fPerStrip*c.strips_per_blade).toFixed(0));
+  $('out').innerHTML=o.join('');
+  const mode={radial:'strips staggered along the blade by pitch/n: finer radial pixels.',angular:'strips phased by a fraction of a column: more columns per rev, same radial pixels.',duplicate:'strips carry the same pixels: brighter, no extra resolution.'}[c.strip_mode];
+  $('dispnote').textContent=`strip_mode=${c.strip_mode}: ${mode} Dots are LED positions at ${angCols} columns; untick show pixels to see the swept arcs.`;
+}
+
+function fit(){
+  for(const id of ['disp','blade']){const cv=$(id),st=cv.parentElement;const w=st.clientWidth,h=st.clientHeight;
+    if(!w||!h)continue;const ar=cv.width/cv.height;let cw=Math.min(w,h*ar),ch=cw/ar;
+    cv.style.width=cw+'px';cv.style.height=ch+'px'}
+}
+new ResizeObserver(fit).observe(document.body);
+// while spinning, a field edit updates the model in place (trail and angle kept); otherwise redraw
+function onEdit(){if($('spin').checked&&raf){const keepAng=simAng;frame=prepare();simAng=keepAng;drawBlade(frame.c);readout(frame.c,frame.L)}else draw()}
+// apply on commit (Enter / Tab / blur) or after a pause in typing, never per keystroke: typing "120"
+// must not pass through 1 and 12
+let editTimer=null;
+for(const k of keys){const e=$(k);
+  e.addEventListener('change',()=>{clearTimeout(editTimer);onEdit()});
+  e.addEventListener('input',()=>{clearTimeout(editTimer);editTimer=setTimeout(onEdit,600)});
+  e.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();e.blur()}})}
+$('show_dots').addEventListener('change',draw);
+$('spin').addEventListener('change',draw);
+// a script may preset the config before the first draw: window.POVD_INIT = {key: value, ...}
+if(window.POVD_INIT)for(const k in POVD_INIT){const e=$(k);if(e)e.type==='checkbox'?e.checked=!!POVD_INIT[k]:e.value=POVD_INIT[k]}
+useStatic(patGrid);
+</script>
+</body></html>

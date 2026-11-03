@@ -19,3 +19,9 @@ __pycache__/
 .pytest_cache/
 pi/povd.conf.tmp
 pi/balance.json.tmp
+# Simulator demo renders
+tools/sim/demo/node_modules/
+tools/sim/demo/cast/
+tools/sim/demo/frames/
+tools/sim/demo/*.webm
+tools/sim/demo/*.mp4

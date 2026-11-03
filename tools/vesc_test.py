@@ -8,7 +8,9 @@ Usage:
     python3 vesc_test.py version                  # firmware + hw name
     python3 vesc_test.py values                   # print telemetry at 5 Hz
     python3 vesc_test.py rpm 3000 --seconds 5     # hold 3000 eRPM for 5 s, then coast
-    python3 vesc_test.py duty 0.05 --seconds 3    # 5 % duty for 3 s
+    python3 vesc_test.py duty 0.05 --seconds 3    # ramp to 5 % duty over 3 s (default --ramp 3), hold 3 s
+    python3 vesc_test.py duty 0.10 --ramp 8 --seconds 10 --ramp_down 5   # soft start and stop
+    python3 vesc_test.py duty 0.05 --ramp 0       # step (the old behaviour)
     python3 vesc_test.py current 2.0 --seconds 3  # 2 A motor current for 3 s
     python3 vesc_test.py stop                     # current 0 (coast)
     python3 vesc_test.py brake 5                  # 5 A regen brake, then release
@@ -24,6 +26,11 @@ are not reachable through this command and stay as set in VESC Tool.
 eRPM = mechanical rpm * pole pairs. A 14-pole motor (7 pairs) at 1000 rpm = 7000 eRPM.
 Any set command must be refreshed faster than the VESC timeout (default 1 s); this
 script resends at 20 Hz for --seconds, then sends current 0.
+
+rpm, duty and current ramp linearly from 0 to the value over --ramp seconds
+(default 3) before the hold, and back down over --ramp_down (default 0 = coast).
+The VESC's own duty ramp (m_duty_ramp_step) is a few ms, so a stepped command
+starts the rotor hard; keep --ramp of several seconds for the rotor.
 """
 import argparse
 import struct
@@ -175,15 +182,30 @@ def fmt(v):
             f"motor {v['temp_motor']:4.1f} C  tach {v['tach']}  fault {f}")
 
 
-def hold(vesc, fn, seconds, hz=20):
-    t_end = time.monotonic() + seconds
+def hold(vesc, fn, seconds, ramp=0.0, ramp_down=0.0, hz=20):
+    """fn(k) sends the command scaled by k in 0..1.
+
+    k ramps 0 -> 1 over `ramp` s, holds at 1 for `seconds`, then 1 -> 0 over
+    `ramp_down` s. Then current 0 (coast). Linear ramp, refreshed at `hz`.
+    """
+    t0 = time.monotonic()
+    t_up, t_hold, t_dn = ramp, ramp + seconds, ramp + seconds + ramp_down
     n = 0
-    while time.monotonic() < t_end:
-        fn()
+    while True:
+        t = time.monotonic() - t0
+        if t >= t_dn:
+            break
+        if t < t_up:
+            k = t / t_up
+        elif t < t_hold:
+            k = 1.0
+        else:
+            k = 1.0 - (t - t_hold) / ramp_down
+        fn(max(0.0, min(1.0, k)))
         if n % 4 == 0:
             v = vesc.get_values()
             if v:
-                print(fmt(v))
+                print(f"k {k:4.2f}  " + fmt(v))
         n += 1
         time.sleep(1.0 / hz)
     vesc.set_current(0)
@@ -193,7 +215,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", default="/dev/serial0")
     ap.add_argument("--baud", type=int, default=115200)
-    ap.add_argument("--seconds", type=float, default=3.0)
+    ap.add_argument("--seconds", type=float, default=3.0, help="hold time at the target")
+    ap.add_argument("--ramp", type=float, default=3.0,
+                    help="seconds to ramp 0 -> target before the hold (rpm/duty/current); 0 = step")
+    ap.add_argument("--ramp_down", type=float, default=0.0,
+                    help="seconds to ramp target -> 0 after the hold; 0 = coast immediately")
     # limits: current limits written with COMM_SET_MCCONF_TEMP (same names as VESC Tool)
     ap.add_argument("--motor_scale", type=float, default=1.0,
                     help="scale (0..1) applied to Motor Current Max/Min set in VESC Tool")
@@ -238,12 +264,13 @@ def main():
     else:
         if a.value is None:
             sys.exit(f"{a.cmd} needs a value")
-        fn = {"rpm": lambda: v.set_rpm(a.value),
-              "duty": lambda: v.set_duty(a.value),
-              "current": lambda: v.set_current(a.value),
-              "brake": lambda: v.set_brake(a.value)}[a.cmd]
+        fn = {"rpm": lambda k: v.set_rpm(a.value * k),
+              "duty": lambda k: v.set_duty(a.value * k),
+              "current": lambda k: v.set_current(a.value * k),
+              "brake": lambda k: v.set_brake(a.value)}[a.cmd]
+        ramp = 0.0 if a.cmd == "brake" else a.ramp
         try:
-            hold(v, fn, a.seconds)
+            hold(v, fn, a.seconds, ramp, a.ramp_down)
         except KeyboardInterrupt:
             v.set_current(0)
     v.ser.close()
