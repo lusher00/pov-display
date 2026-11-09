@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>povd</title>
+<style>
+:root { --bg:#14161a; --panel:#1d2026; --line:#2c3038; --text:#e4e6ea; --dim:#8a909c; --acc:#4fb3ff; --bad:#ff7a59; --ok:#5ad08a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+header { display: flex; gap: 16px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+header h1 { font-size: 16px; margin: 0; }
+button { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 5px 12px; font: inherit; cursor: pointer; }
+button:hover { border-color: var(--acc); }
+button.on { border-color: var(--ok); color: var(--ok); }
+main { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; padding: 12px 16px; }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin: 0 0 8px; }
+.row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 8px; padding: 3px 0; }
+.row label { color: var(--text); }
+.row .hint { grid-column: 2; color: var(--dim); font-size: 12px; margin-top: -2px; }
+input, select { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; font: inherit; }
+input:focus, select:focus { outline: none; border-color: var(--acc); }
+input.err { border-color: var(--bad); }
+input.done { border-color: var(--ok); }
+.stat { display: grid; grid-template-columns: 150px 1fr; padding: 2px 0; }
+.stat span:first-child { color: var(--dim); }
+.bad { color: var(--bad); }
+#msg { color: var(--dim); }
+</style>
+</head>
+<body>
+<header>
+  <h1>povd</h1>
+  <button id="buck">buck</button>
+  <button id="save">save</button>
+  <span id="msg"></span>
+</header>
+<main>
+  <section><h2>status</h2><div id="status"></div></section>
+  <section><h2>display</h2><div id="g_display"></div></section>
+  <section><h2>rotor and strips</h2><div id="g_rotor"></div></section>
+  <section><h2>output</h2><div id="g_output"></div></section>
+  <section><h2>angle</h2><div id="g_angle"></div></section>
+  <section><h2>network and boot</h2><div id="g_net"></div></section>
+</main>
+<script>
+const GROUP = {
+  pattern:'display', color:'display', bright:'display', time:'display',
+  blades:'rotor', strips_per_blade:'rotor', leds_per_strip:'rotor', led_pitch_mm:'rotor', r0_mm:'rotor', strip_rev:'rotor',
+  columns_per_rev:'output', clk_mhz:'output',
+  slots:'angle', missing:'angle', phase_deg:'angle', mirror:'angle', sim_rpm:'angle',
+  wifi_ssid:'net', wifi_pass:'net', hostname:'net', buck_boot:'net',
+};
+const HINT = {
+  pattern:'off index chan rings spokes grid wheel solid clock',
+  color:'RRGGBB for pattern solid', bright:'SK9822 global brightness 0..31',
+  time:'hh:mm[:ss] for pattern clock',
+  strips_per_blade:'channel c is blade c / strips_per_blade', r0_mm:'radius of the first LED',
+  strip_rev:'1 = data enters at the tip', clk_mhz:'t_column_us must stay below column_period_us',
+  slots:'pulse positions per rev on ENC_A', missing:'1 = one position has no magnet (index gap)',
+  phase_deg:'rotate the image; line up with pattern index', mirror:'1 = flip rotation sense',
+  sim_rpm:'>0 generates ENC_A pulses internally', buck_boot:'1 = strip supply on at boot',
+  wifi_pass:'write-only', hostname:'page at http://<hostname>.local',
+};
+const PATTERNS = ['off','index','chan','rings','spokes','grid','wheel','solid','clock'];
+const $ = id => document.getElementById(id);
+const msg = t => { $('msg').textContent = t; };
+
+async function post(path, body) {
+  const r = await fetch(path, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body});
+  const t = await r.text();
+  if (!r.ok) throw new Error(t);
+  return t;
+}
+
+async function setKey(k, v, el) {
+  try {
+    await post('/api/set', 'k=' + encodeURIComponent(k) + '&v=' + encodeURIComponent(v));
+    if (el) { el.classList.remove('err'); el.classList.add('done'); setTimeout(() => el.classList.remove('done'), 600); }
+    msg(k + ' = ' + (k === 'wifi_pass' ? '(set)' : v) + '  (not saved)');
+  } catch (e) {
+    if (el) el.classList.add('err');
+    msg(e.message);
+  }
+}
+
+function row(k, el) {
+  const d = document.createElement('div');
+  d.className = 'row';
+  const l = document.createElement('label');
+  l.textContent = k; l.htmlFor = 'k_' + k;
+  el.id = 'k_' + k;
+  d.append(l, el);
+  if (HINT[k]) { const h = document.createElement('div'); h.className = 'hint'; h.textContent = HINT[k]; d.append(h); }
+  return d;
+}
+
+function field(k, t, v) {
+  let el;
+  if (k === 'pattern') {
+    el = document.createElement('select');
+    for (const p of PATTERNS) { const o = document.createElement('option'); o.value = o.textContent = p; el.append(o); }
+    el.value = v;
+    el.onchange = () => setKey(k, el.value, el);
+    return el;
+  }
+  el = document.createElement('input');
+  el.type = k === 'wifi_pass' ? 'password' : 'text';
+  if (t !== 'str') el.inputMode = 'decimal';
+  el.value = v;
+  el.dataset.last = v;
+  const commit = () => { if (el.value !== el.dataset.last) { el.dataset.last = el.value; setKey(k, el.value, el); } };
+  el.onkeydown = e => { if (e.key === 'Enter') commit(); };
+  el.onblur = commit;
+  return el;
+}
+
+async function loadConfig() {
+  const keys = await (await fetch('/api/config')).json();
+  for (const g of ['display','rotor','output','angle','net']) $('g_' + g).innerHTML = '';
+  for (const {k, t, v} of keys) $('g_' + (GROUP[k] || 'net')).append(row(k, field(k, t, v)));
+  $('g_net').append(row('wifi_pass', field('wifi_pass', 'str', '')));
+  $('g_display').append(row('time', field('time', 'str', '')));
+}
+
+let buck = 0;
+async function poll() {
+  try {
+    const s = await (await fetch('/api/status')).json();
+    buck = s.buck;
+    $('buck').textContent = 'buck ' + (buck ? 'on' : 'off');
+    $('buck').className = buck ? 'on' : '';
+    const over = s.column_period_us > 0 && s.t_column_us > s.column_period_us;
+    const rows = [
+      ['rpm', s.rpm], ['synced', s.synced], ['revs', s.revs],
+      ['enc_a_edges', s.enc_a_edges], ['enc_b_edges', s.enc_b_edges],
+      ['columns_sent/s', s.columns_sent_s], ['columns_skipped/s', s.columns_skipped_s, s.columns_skipped_s > 0],
+      ['t_column_us', s.t_column_us, over], ['column_period_us', s.column_period_us || '-'],
+      ['I_IN_mV', s.I_IN_mV], ['ip', s.ip],
+    ];
+    $('status').innerHTML = rows.map(([k, v, bad]) => `<div class="stat"><span>${k}</span><span class="${bad ? 'bad' : ''}">${v}</span></div>`).join('');
+  } catch (e) { msg('no connection'); }
+}
+
+$('buck').onclick = () => setKey('buck', buck ? '0' : '1').then(poll);
+$('save').onclick = async () => { try { msg(await post('/api/save', '')); } catch (e) { msg(e.message); } };
+loadConfig();
+poll();
+setInterval(poll, 1000);
+</script>
+</body>
+</html>

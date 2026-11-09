@@ -6,3 +6,11 @@ ESP-IDF, ESP32-S3. Planned structure:
 - Angle: PCNT on ENC_A/ENC_B for counts, timer capture for edge period, index from the long high pulse. Column timer = edge period / N, phase re-aligned at each edge.
 - Power: BUCK_EN low at boot, enable after self-test; brightness limited from I_IN.
 - Wi-Fi: image upload and OTA.
+
+## Status
+
+- `povd_fw/`: first-light firmware (ESP-IDF). Angle from ENC_A pulses, LCD_CAM DMA to all 8
+  channels, built-in patterns, console with one command per config key, QEMU build. See
+  povd_fw/README.md.
+- `bringup/`: Arduino bench sketch (BUCK_EN, pin walk, moving dot, encoder edges).
+- Not yet: Wi-Fi image upload, OTA, brightness limit from I_IN.

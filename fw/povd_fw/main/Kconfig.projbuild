@@ -1,0 +1,5 @@
+menu "povd"
+config POVD_QEMU
+    bool "Build for Espressif QEMU (no ADC, console on UART0)"
+    default n
+endmenu

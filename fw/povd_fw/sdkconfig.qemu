@@ -1,0 +1,7 @@
+# QEMU build: console on UART0 instead of the USB port; Espressif's QEMU has no PSRAM model,
+# so the image buffer goes in internal RAM and columns_per_rev defaults lower (see config.c)
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=n
+CONFIG_SPIRAM=n
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_160=y
+CONFIG_POVD_QEMU=y

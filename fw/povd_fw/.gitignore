@@ -1,0 +1,7 @@
+build/
+build_qemu/
+sdkconfig
+sdkconfig.old
+sdkconfig.qemu.full
+sdkconfig.qemu.full.old
+sdkconfig.before-wifi
